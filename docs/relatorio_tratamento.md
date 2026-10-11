@@ -1,6 +1,6 @@
 # Relatório de tratamento e carga
 
-Gerado automaticamente por `run_pipeline.py` em 10/10/2026 20:49.
+Gerado automaticamente por `run_pipeline.py` em 10/10/2026 22:23.
 
 ## 1. Versão original utilizada (data/raw/manifest.json)
 

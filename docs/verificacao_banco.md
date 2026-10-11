@@ -1,8 +1,8 @@
 # Verificação do banco (sql/03_verificacao.sql)
 
-Executado em 10/10/2026 21:07.
+Executado em 10/10/2026 22:23.
 
-Servidor: `PostgreSQL 16.15 (Debian 16.15-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit`
+Servidor: `PostgreSQL 18.6 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.3.1 20260722 (Red Hat 15.3.1-1), 64-bit`
 
 ## 1. Registros por tabela
 
@@ -102,19 +102,19 @@ Servidor: `PostgreSQL 16.15 (Debian 16.15-1.pgdg13+2) on x86_64-pc-linux-gnu, co
 
 | fonte | arquivo | sha256 | linhas_lidas | linhas_apos_filtro | executado_em |
 |---|---|---|---|---|---|
-| SINESP-VDE | BancoVDE 2019.xlsx | 01d5cefb6459 | 764700 | 403874 | 2026-10-10 23:48:56.550140+00:00 |
-| SINESP-VDE | BancoVDE 2020.xlsx | 7648a93a473d | 764700 | 403862 | 2026-10-10 23:48:56.550140+00:00 |
-| SINESP-VDE | BancoVDE 2021.xlsx | babdbbbc71c4 | 764732 | 403837 | 2026-10-10 23:48:56.550140+00:00 |
-| SINESP-VDE | BancoVDE 2022.xlsx | f5561304e956 | 764652 | 403833 | 2026-10-10 23:48:56.550140+00:00 |
-| SINESP-VDE | BancoVDE 2023.xlsx | 33baf9e4d2ad | 764772 | 403831 | 2026-10-10 23:48:56.550140+00:00 |
-| SINESP-VDE | BancoVDE 2024.xlsx | 87deaea4473c | 764820 | 403826 | 2026-10-10 23:48:56.550140+00:00 |
-| SIM | Mortalidade_Geral_2019.csv | 05acd2eea502 | 1349801 | 3728 | 2026-10-10 23:48:56.550140+00:00 |
-| SIM | Mortalidade_Geral_2020.csv | 2fdd9fcc8924 | 1556824 | 3822 | 2026-10-10 23:48:56.550140+00:00 |
-| SIM | Mortalidade_Geral_2021.csv | 79cfbfff330f | 1832649 | 3844 | 2026-10-10 23:48:56.550140+00:00 |
-| SIM | Mortalidade_Geral_2022.csv | e0c5c0bc97d1 | 1544266 | 3788 | 2026-10-10 23:48:56.550140+00:00 |
-| SIM | Mortalidade_Geral_2023.csv | 28db720ab8fd | 1465610 | 3887 | 2026-10-10 23:48:56.550140+00:00 |
-| SIM | Mortalidade_Geral_2024.csv | be397f348a6a | 1532015 | 3622 | 2026-10-10 23:48:56.550140+00:00 |
-| IBGE | municipios.json | 77bf68d9f5b1 | 5571 | 5571 | 2026-10-10 23:48:56.550140+00:00 |
+| SINESP-VDE | BancoVDE 2019.xlsx | 01d5cefb6459 | 764700 | 403874 | 2026-10-11 01:22:45.286291+00:00 |
+| SINESP-VDE | BancoVDE 2020.xlsx | 7648a93a473d | 764700 | 403862 | 2026-10-11 01:22:45.286291+00:00 |
+| SINESP-VDE | BancoVDE 2021.xlsx | babdbbbc71c4 | 764732 | 403837 | 2026-10-11 01:22:45.286291+00:00 |
+| SINESP-VDE | BancoVDE 2022.xlsx | f5561304e956 | 764652 | 403833 | 2026-10-11 01:22:45.286291+00:00 |
+| SINESP-VDE | BancoVDE 2023.xlsx | 33baf9e4d2ad | 764772 | 403831 | 2026-10-11 01:22:45.286291+00:00 |
+| SINESP-VDE | BancoVDE 2024.xlsx | 87deaea4473c | 764820 | 403826 | 2026-10-11 01:22:45.286291+00:00 |
+| SIM | Mortalidade_Geral_2019.csv | 05acd2eea502 | 1349801 | 3728 | 2026-10-11 01:22:45.286291+00:00 |
+| SIM | Mortalidade_Geral_2020.csv | 2fdd9fcc8924 | 1556824 | 3822 | 2026-10-11 01:22:45.286291+00:00 |
+| SIM | Mortalidade_Geral_2021.csv | 79cfbfff330f | 1832649 | 3844 | 2026-10-11 01:22:45.286291+00:00 |
+| SIM | Mortalidade_Geral_2022.csv | e0c5c0bc97d1 | 1544266 | 3788 | 2026-10-11 01:22:45.286291+00:00 |
+| SIM | Mortalidade_Geral_2023.csv | 28db720ab8fd | 1465610 | 3887 | 2026-10-11 01:22:45.286291+00:00 |
+| SIM | Mortalidade_Geral_2024.csv | be397f348a6a | 1532015 | 3622 | 2026-10-11 01:22:45.286291+00:00 |
+| IBGE | municipios.json | 77bf68d9f5b1 | 5571 | 5571 | 2026-10-11 01:22:45.286291+00:00 |
 
 ## 6. Amostra de vw_comparativo_uf_ano
 
