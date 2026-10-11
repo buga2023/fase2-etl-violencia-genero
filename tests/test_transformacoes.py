@@ -40,10 +40,16 @@ def test_normalizar_texto():
 
 
 def test_idade_e_faixa():
-    anos = transform_sim.idade_em_anos(pd.Series(["435", "502", "215", "", "000", "999"]))
-    assert anos.tolist()[:3] == [35, 102, 0]
-    assert anos.isna().tolist()[3:] == [True, True, True]
-    assert transform_sim.faixa_etaria(anos).tolist() == [5, 8, 1, 9, 9, 9]
+    # unidade: 0 minutos, 1 horas, 2 dias, 3 meses (< 1 ano), 4 anos, 5 = 100 + valor; 999 ignorada
+    anos = transform_sim.idade_em_anos(pd.Series(["435", "502", "215", "010", "123", "311", "", "999"]))
+    assert anos.tolist()[:6] == [35, 102, 0, 0, 0, 0]
+    assert anos.isna().tolist()[6:] == [True, True]
+    assert transform_sim.faixa_etaria(anos).tolist() == [5, 8, 1, 1, 1, 1, 9, 9]
+
+
+def test_filtro_cid_agressao():
+    cids = pd.Series(["X849", "X850", "X954", "Y099", "Y100", "X9", "Y0", "XA01", None])
+    assert transform_sim.cid_agressao(cids).tolist() == [False, True, True, True, False, False, False, False, False]
 
 
 def test_sinesp(ambiente):
@@ -52,7 +58,7 @@ def test_sinesp(ambiente):
         sorted((raw / "sinesp").glob("*.xlsx")), dim_mun, dim_ev)
     ssa = id_mun(dim_mun, "Salvador")
     hom = int(dim_ev.loc[dim_ev["nome"] == "Homicídio doloso", "id_evento"].iloc[0])
-    # duplicata removida e '1.050' convertido
+    # cópia da mesma linha em outro arquivo removida e '1.050' convertido
     linha = fato.query("id_tempo == 201903 and id_municipio == @ssa and id_evento == @hom and id_sexo == 2")
     assert linha["qt_vitimas"].item() == 1050
     # alias e apóstrofo casam com o IBGE
@@ -65,8 +71,11 @@ def test_sinesp(ambiente):
     assert fato["id_tempo"].min() >= 201901
     # município inexistente vai para 'NÃO INFORMADO' de PE
     assert extras["municipios_nao_casados"]["municipio"].tolist() == ["Cidade Fantasma"]
-    # total confere: 2 + (5+1050+1) + 1 + 4 + 1 + 3 + 3 (BA n/inf) + 1 + 6 + 100
-    assert fato["qt_vitimas"].sum() == 1177
+    # DF informa uma linha por Região Administrativa, todas como 'Brasília': as duas contam
+    bsb = id_mun(dim_mun, "Brasília")
+    assert fato.query("id_municipio == @bsb")["qt_vitimas"].sum() == 2
+    # total confere: 2 + (5+1050+1) + 1 + 4 + 1 + 3 + 3 (BA n/inf) + 1 + 2 (DF) + 6 + 100
+    assert fato["qt_vitimas"].sum() == 1179
 
 
 def test_sim(ambiente):

@@ -33,15 +33,23 @@ def _blocos(arq):
 
 
 def idade_em_anos(idade: pd.Series) -> pd.Series:
-    """IDADE do SIM: 1º dígito = unidade (0-3 < 1 ano, 4 = anos, 5 = 100+ anos), 2 dígitos = valor."""
-    s = idade.astype("string").str.strip().str.replace(r"\.0$", "", regex=True).str.zfill(3)
+    """IDADE do SIM: 1º dígito = unidade (0 min, 1 h, 2 dias, 3 meses → 0 anos; 4 = anos; 5 = 100 + valor).
+
+    Unidade 9 / código '999' = ignorada (NA)."""
+    s = idade.astype("string").str.strip().str.replace(r"\.0$", "", regex=True)
+    s = s.mask(s == "").str.zfill(3)                     # vazio = ignorada, não "000"
     unidade = pd.to_numeric(s.str[0], errors="coerce")
     valor = pd.to_numeric(s.str[1:3], errors="coerce")
     anos = pd.Series(pd.NA, index=s.index, dtype="Int64")
-    anos[unidade.between(1, 3)] = 0
+    anos[unidade.between(0, 3)] = 0
     anos[unidade == 4] = valor[unidade == 4]
     anos[unidade == 5] = 100 + valor[unidade == 5]
     return anos
+
+
+def cid_agressao(causabas: pd.Series) -> pd.Series:
+    """CID-10 X85–Y09 (agressões). Regex explícita: comparar texto com between() aceitaria 'X9' ou 'Y0'."""
+    return causabas.astype("string").str.strip().str.upper().str.match(r"^(X8[5-9]|X9\d|Y0\d)").fillna(False).astype(bool)
 
 
 def faixa_etaria(anos: pd.Series) -> pd.Series:
@@ -56,9 +64,8 @@ def _tratar_bloco(b: pd.DataFrame, cod6_para_id: pd.Series, nao_inf_por_uf: pd.S
     b = b.rename(columns=lambda c: c.strip('"'))
     stats["lidas"] += len(b)
 
-    cid = b["CAUSABAS"].astype("string").str.strip().str.upper().str[:3]
     sexo = b["SEXO"].astype("string").str.strip()
-    b = b[cid.between(cfg.CID_INICIO, cfg.CID_FIM).fillna(False) & sexo.isin(cfg.SEXO_FEMININO_SIM).fillna(False)].copy()
+    b = b[cid_agressao(b["CAUSABAS"]).values & sexo.isin(cfg.SEXO_FEMININO_SIM).fillna(False).values].copy()
     stats["agressao_mulher"] += len(b)
     if b.empty:
         return None
