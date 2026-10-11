@@ -1,6 +1,7 @@
 {
- "executado_em": "2026-10-10T22:23:11",
+ "executado_em": "2026-10-10T23:37:59",
  "aiven": true,
+ "host_mascarado": "pg-1fc1….e.aivencloud.com",
  "versao": "PostgreSQL 18.6 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.3.1 20260722 (Red Hat 15.3.1-1), 64-bit",
  "contagem": {
   "colunas": [
@@ -46,7 +47,7 @@
    ],
    [
     "fato_obitos_agressao_sim",
-    22006
+    22005
    ],
    [
     "meta_carga",
@@ -60,7 +61,7 @@
   ],
   "linhas": [
    [
-    "37 MB"
+    "25 MB"
    ]
   ]
  },
@@ -81,13 +82,13 @@
    [
     "dim_evento",
     "nome",
-    "character varying",
+    "character varying(80)",
     "NO"
    ],
    [
     "dim_evento",
     "grupo",
-    "character varying",
+    "character varying(20)",
     "NO"
    ],
    [
@@ -105,7 +106,7 @@
    [
     "dim_faixa_etaria",
     "descricao",
-    "character varying",
+    "character varying(15)",
     "NO"
    ],
    [
@@ -129,13 +130,13 @@
    [
     "dim_meio_agressao",
     "descricao",
-    "character varying",
+    "character varying(40)",
     "NO"
    ],
    [
     "dim_meio_agressao",
     "cids",
-    "character varying",
+    "character varying(40)",
     "NO"
    ],
    [
@@ -153,13 +154,13 @@
    [
     "dim_municipio",
     "nome",
-    "character varying",
+    "character varying(80)",
     "NO"
    ],
    [
     "dim_municipio",
     "nome_normalizado",
-    "character varying",
+    "character varying(80)",
     "NO"
    ],
    [
@@ -177,7 +178,7 @@
    [
     "dim_raca_cor",
     "descricao",
-    "character varying",
+    "character varying(15)",
     "NO"
    ],
    [
@@ -195,13 +196,13 @@
    [
     "dim_sexo",
     "codigo",
-    "character",
+    "character(1)",
     "NO"
    ],
    [
     "dim_sexo",
     "descricao",
-    "character varying",
+    "character varying(15)",
     "NO"
    ],
    [
@@ -243,19 +244,19 @@
    [
     "dim_uf",
     "sigla",
-    "character",
+    "character(2)",
     "NO"
    ],
    [
     "dim_uf",
     "nome",
-    "character varying",
+    "character varying(30)",
     "NO"
    ],
    [
     "dim_uf",
     "regiao",
-    "character varying",
+    "character varying(15)",
     "NO"
    ],
    [
@@ -339,19 +340,19 @@
    [
     "meta_carga",
     "fonte",
-    "character varying",
+    "character varying(20)",
     "NO"
    ],
    [
     "meta_carga",
     "arquivo",
-    "character varying",
+    "character varying(200)",
     "NO"
    ],
    [
     "meta_carga",
     "sha256",
-    "character",
+    "character(64)",
     "NO"
    ],
    [
@@ -371,6 +372,18 @@
     "linhas_apos_filtro",
     "bigint",
     "NO"
+   ],
+   [
+    "meta_carga",
+    "arquivo_origem",
+    "character varying(200)",
+    "YES"
+   ],
+   [
+    "meta_carga",
+    "sha256_origem",
+    "character(64)",
+    "YES"
    ],
    [
     "meta_carga",
@@ -461,6 +474,8 @@
    "fonte",
    "arquivo",
    "sha256",
+   "arquivo_origem",
+   "sha256_origem",
    "linhas_lidas",
    "linhas_apos_filtro",
    "executado_em"
@@ -470,105 +485,131 @@
     "SINESP-VDE",
     "BancoVDE 2019.xlsx",
     "01d5cefb6459",
+    null,
+    null,
     764700,
-    403874,
-    "2026-10-11T01:22:45+00:00"
+    406116,
+    "2026-10-11T02:37:26+00:00"
    ],
    [
     "SINESP-VDE",
     "BancoVDE 2020.xlsx",
     "7648a93a473d",
+    null,
+    null,
     764700,
-    403862,
-    "2026-10-11T01:22:45+00:00"
+    406116,
+    "2026-10-11T02:37:26+00:00"
    ],
    [
     "SINESP-VDE",
     "BancoVDE 2021.xlsx",
     "babdbbbc71c4",
+    null,
+    null,
     764732,
-    403837,
-    "2026-10-11T01:22:45+00:00"
+    406136,
+    "2026-10-11T02:37:26+00:00"
    ],
    [
     "SINESP-VDE",
     "BancoVDE 2022.xlsx",
     "f5561304e956",
+    null,
+    null,
     764652,
-    403833,
-    "2026-10-11T01:22:45+00:00"
+    406086,
+    "2026-10-11T02:37:26+00:00"
    ],
    [
     "SINESP-VDE",
     "BancoVDE 2023.xlsx",
     "33baf9e4d2ad",
+    null,
+    null,
     764772,
-    403831,
-    "2026-10-11T01:22:45+00:00"
+    406161,
+    "2026-10-11T02:37:26+00:00"
    ],
    [
     "SINESP-VDE",
     "BancoVDE 2024.xlsx",
     "87deaea4473c",
+    null,
+    null,
     764820,
-    403826,
-    "2026-10-11T01:22:45+00:00"
+    406191,
+    "2026-10-11T02:37:26+00:00"
    ],
    [
     "SIM",
     "Mortalidade_Geral_2019.csv",
     "05acd2eea502",
+    null,
+    null,
     1349801,
     3728,
-    "2026-10-11T01:22:45+00:00"
+    "2026-10-11T02:37:26+00:00"
    ],
    [
     "SIM",
     "Mortalidade_Geral_2020.csv",
     "2fdd9fcc8924",
+    null,
+    null,
     1556824,
     3822,
-    "2026-10-11T01:22:45+00:00"
+    "2026-10-11T02:37:26+00:00"
    ],
    [
     "SIM",
     "Mortalidade_Geral_2021.csv",
     "79cfbfff330f",
+    "Mortalidade_Geral_2021_csv.zip",
+    "6a8fe8077cf1",
     1832649,
     3844,
-    "2026-10-11T01:22:45+00:00"
+    "2026-10-11T02:37:26+00:00"
    ],
    [
     "SIM",
     "Mortalidade_Geral_2022.csv",
     "e0c5c0bc97d1",
+    "Mortalidade_Geral_2022_csv.zip",
+    "10b37a98b9c2",
     1544266,
     3788,
-    "2026-10-11T01:22:45+00:00"
+    "2026-10-11T02:37:26+00:00"
    ],
    [
     "SIM",
     "Mortalidade_Geral_2023.csv",
     "28db720ab8fd",
+    "Mortalidade_Geral_2023_csv.zip",
+    "9a14ef4355b7",
     1465610,
     3887,
-    "2026-10-11T01:22:45+00:00"
+    "2026-10-11T02:37:26+00:00"
    ],
    [
     "SIM",
     "Mortalidade_Geral_2024.csv",
     "be397f348a6a",
+    "DO24OPEN_csv.zip",
+    "13db250c9090",
     1532015,
     3622,
-    "2026-10-11T01:22:45+00:00"
+    "2026-10-11T02:37:26+00:00"
    ],
    [
     "IBGE",
     "municipios.json",
     "77bf68d9f5b1",
+    null,
+    null,
     5571,
     5571,
-    "2026-10-11T01:22:45+00:00"
+    "2026-10-11T02:37:26+00:00"
    ]
   ]
  },
@@ -578,6 +619,7 @@
    "uf",
    "regiao",
    "feminicidios_sinesp",
+   "feminicidios_mulheres_sinesp",
    "vitimas_letais_mulheres_sinesp",
    "obitos_agressao_mulheres_sim",
    "obitos_mulheres_negras_sim",
@@ -589,6 +631,7 @@
     "BA",
     "Nordeste",
     110,
+    110,
     403,
     405,
     356,
@@ -599,6 +642,7 @@
     "SP",
     "Sudeste",
     253,
+    251,
     447,
     348,
     140,
@@ -608,6 +652,7 @@
     2024,
     "PE",
     "Nordeste",
+    76,
     76,
     264,
     273,
@@ -619,6 +664,7 @@
     "CE",
     "Nordeste",
     41,
+    41,
     312,
     269,
     251,
@@ -628,6 +674,7 @@
     2024,
     "MG",
     "Sudeste",
+    169,
     169,
     358,
     266,
@@ -639,6 +686,7 @@
     "RJ",
     "Sudeste",
     107,
+    104,
     350,
     261,
     169,
@@ -648,6 +696,7 @@
     2024,
     "PR",
     "Sul",
+    109,
     109,
     259,
     234,
@@ -659,6 +708,7 @@
     "RS",
     "Sul",
     73,
+    73,
     205,
     202,
     39,
@@ -668,6 +718,7 @@
     2024,
     "PA",
     "Norte",
+    52,
     52,
     188,
     168,
@@ -679,6 +730,7 @@
     "MA",
     "Nordeste",
     69,
+    69,
     156,
     154,
     131,
@@ -686,5 +738,5 @@
    ]
   ]
  },
- "tamanho_bytes": 26009600
+ "tamanho_bytes": 26017792
 }

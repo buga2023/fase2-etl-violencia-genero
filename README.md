@@ -13,9 +13,7 @@ Esta fase dá sequência às decisões da Fase 1: recorte 2019–2024, filtro na
 ```bash
 pip install -r requirements.txt
 cp .env.example .env                 # cole a Service URI do Aiven em DATABASE_URL
-# SINESP: baixe "BancoVDE <ano>.xlsx" (2019 a 2024) do gov.br/mj → data/raw/sinesp/ (link abaixo)
-python -m scripts.padronizar_sim     # só se usar os ZIPs do SIM 2022/2023 (ver abaixo)
-python run_pipeline.py               # baixa IBGE + SIM, trata, carrega e gera docs/relatorio_tratamento.md
+python run_pipeline.py               # baixa IBGE + SINESP + SIM (~2,6 GB), trata, carrega e gera docs/relatorio_tratamento.md
 python -m scripts.verificar_banco    # roda sql/03_verificacao.sql e grava docs/verificacao_banco.md
 python -m pytest -q tests            # testes das regras de tratamento
 ```
@@ -29,7 +27,7 @@ A carga é **idempotente**: recria o schema e recarrega tudo numa única transa�
 ├── run_pipeline.py            orquestra extração → tratamento → carga → relatório
 ├── etl/
 │   ├── config.py              TODAS as decisões de recorte (anos, eventos, CIDs, aliases)
-│   ├── extract.py             download + manifesto SHA-256 da versão original
+│   ├── extract.py             download (IBGE, SINESP, SIM) + extração dos ZIPs + manifesto SHA-256
 │   ├── dimensoes.py           dimensões estáticas + municípios via API IBGE (JSON)
 │   ├── transform_sinesp.py    tratamento da SINESP-VDE
 │   ├── transform_sim.py       tratamento do SIM em chunks
@@ -40,7 +38,7 @@ A carga é **idempotente**: recria o schema e recarrega tudo numa única transa�
 │   ├── 02_views.sql           visões analíticas para a Fase 3
 │   └── 03_verificacao.sql     consultas de evidência (contagens, tamanho, tipos, FKs)
 ├── scripts/
-│   ├── padronizar_sim.py      cabeçalho + data DDMMAAAA nos CSVs do SIM 2022/2023 (publicados sem cabeçalho)
+│   ├── padronizar_sim.py      atalho para etl/padronizar_sim.py (SIM 2022/2023 publicados sem cabeçalho)
 │   ├── verificar_banco.py     executa sql/03_verificacao.sql sem precisar de psql
 │   └── finalizar_entrega.ps1  carga no Aiven → evidências → documento DOCX/PDF em Downloads
 ├── tests/                     dados sintéticos no formato das fontes + testes (pytest)
@@ -64,9 +62,9 @@ A carga é **idempotente**: recria o schema e recarrega tudo numa única transa�
 
 | Fonte | Conteúdo | Formato | Acesso |
 |---|---|---|---|
-| SINESP-VDE (MJSP) | Vítimas por UF, município, mês e evento, com quebra por sexo | XLSX (um por ano) | Download em `https://www.gov.br/mj/pt-br/assuntos/sua-seguranca/seguranca-publica/estatistica/download/dnsp-base-de-dados/bancovde-<ano>.xlsx/@@download/file` (o antigo dados.mj.gov.br saiu do ar) |
-| SIM (DataSUS) | Uma linha por Declaração de Óbito | CSV `;` (OpenDataSUS) ou Parquet (PySUS) | 2019–2020 automático; 2021–2024 em `https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/csv/` (`Mortalidade_Geral_<ano>_csv.zip`; 2024 = `DO24OPEN_csv.zip`). 2022 e 2023 vêm sem cabeçalho: guarde o ZIP em `data/raw/sim/` e rode `python -m scripts.padronizar_sim` |
-| IBGE Localidades | Código e nome dos 5.570 municípios | JSON (API REST) | Download automático |
+| SINESP-VDE (MJSP) | Vítimas por UF, município, mês e evento, com quebra por sexo | XLSX (um por ano) | Download automático de `https://www.gov.br/mj/pt-br/assuntos/sua-seguranca/seguranca-publica/estatistica/download/dnsp-base-de-dados/bancovde-<ano>.xlsx/@@download/file` (o antigo dados.mj.gov.br saiu do ar) |
+| SIM (DataSUS) | Uma linha por Declaração de Óbito | CSV `;` (2019–2020) e CSV em ZIP (2021–2024) | Download automático (links em `SIM_FONTES`, `etl/config.py`). 2022 e 2023 vêm sem cabeçalho e são padronizados por `etl/padronizar_sim.py`; o ZIP oficial fica registrado na `meta_carga` |
+| IBGE Localidades | Código e nome dos 5.571 municípios | JSON (API REST) | Download automático |
 
 A SINESP traz **gênero** mas não traz **raça/cor**. O SIM traz raça/cor. Por isso a base tratada une as duas fontes por dimensões compartilhadas. É isso que torna possível a análise interseccional (ODS 5 + ODS 18).
 
@@ -76,11 +74,11 @@ A SINESP traz **gênero** mas não traz **raça/cor**. O SIM traz raça/cor. Por
 |---|---|---|---|
 | 1 | Nomes de coluna variam entre anos/arquivos | Normalização (minúsculas, sem acento, `_`) e validação das colunas obrigatórias | Pipeline não quebra com mudança de layout e falha cedo se faltar campo essencial |
 | 2 | `data_referencia` chega como data, texto `MM/AAAA` ou separada em ano/mês | Conversão para `DATE` no dia 01 | Grão mensal único para as duas fontes |
-| 3 | 28 indicadores, a maioria fora do tema (apreensão de drogas, roubo de carga…) | Mantidos 8 eventos de violência contra a pessoa (`EVENTOS` em config) | Foco no tema e menos volume. A comparação ignora acento e caixa ("FEMINICIDIO" = "Feminicídio") |
+| 3 | 31 indicadores, a maioria fora do tema (apreensão de drogas, roubo de carga…) | Mantidos 8 eventos de violência contra a pessoa (`EVENTOS` em config) | Foco no tema e menos volume. A comparação ignora acento e caixa ("FEMINICIDIO" = "Feminicídio") |
 | 4 | Contagens como texto com separador de milhar (`"1.050"`) | `inteiro_br()`: remove o `.` de milhar, troca a `,` decimal e converte para `INTEGER` | Equivale ao "string monetária → decimal" do guia, aplicado ao nosso tema |
 | 5 | Linhas com `total_vitima` > 0 e sexo vazio | Total atribuído a "Não informado" | Não perde vítimas e não inventa sexo |
 | 6 | Soma por sexo ≠ `total_vitima` | Mantida a quebra por sexo; ocorrências contadas no relatório | Gênero é o eixo de análise; a divergência fica documentada |
-| 7 | Linhas duplicadas | Removidas as duplicatas exatas | Evita contar a mesma vítima duas vezes |
+| 7 | Linhas repetidas | Removida só a mesma linha repetida em **outro arquivo**; linhas iguais no mesmo arquivo são mantidas e somadas | O DF informa uma linha por Região Administrativa, todas como "BRASÍLIA": removê-las apagava ~60% das vítimas do DF. Fora do DF, as repetições têm zero vítimas |
 | 8 | Município identificado só pelo **nome** | Junção com o IBGE por nome normalizado (sem acento/apóstrofo/espaço) + tabela de aliases (ex.: Embu → Embu das Artes) | Gera o código IBGE, que é a chave para cruzar com o SIM |
 | 9 | Nome sem correspondência ou "Não informado" | Vai para a linha "NÃO INFORMADO" da UF; nomes listados no relatório | Preserva o total estadual; a lista orienta novos aliases |
 | 10 | Colunas `agente`, `arma`, `faixa_etaria`, `total_peso` | Descartadas | Detalham outros indicadores (apreensões, mortes de agentes). O relatório mostra quantas linhas do escopo têm essas colunas preenchidas, como evidência do descarte |
@@ -91,9 +89,9 @@ A SINESP traz **gênero** mas não traz **raça/cor**. O SIM traz raça/cor. Por
 | # | Problema encontrado na origem | Decisão | Justificativa |
 |---|---|---|---|
 | 1 | ~1,5 milhão de linhas/ano, 80+ colunas | Leitura de só 6 colunas, em blocos de 200 mil linhas, cada bloco agregado antes de seguir | Memória constante e base final muito abaixo de 1 GB |
-| 2 | Inclui todas as causas de morte | Filtro `CAUSABAS` entre X85 e Y09 (agressões) e `SEXO` feminino (`2` ou `F`) | Recorte da Fase 1. Aceita os dois códigos de sexo usados ao longo dos anos |
+| 2 | Inclui todas as causas de morte | Filtro `CAUSABAS` X85–Y09 por expressão regular (agressões) e `SEXO` feminino (`2` ou `F`) | Recorte da Fase 1. A regex não aceita códigos truncados como "X9" |
 | 3 | `DTOBITO` como `DDMMAAAA` e, às vezes, sem o zero à esquerda (`1032019`) | Lida como texto, completada com zeros e convertida para `DATE` | Sem isso, óbitos de dias 1 a 9 viram datas inválidas |
-| 4 | `IDADE` codificada (1º dígito = unidade, 4 = anos, 5 = 100+) | Decodificada em anos e agrupada em 9 faixas etárias | Faixa etária é o terceiro eixo interseccional |
+| 4 | `IDADE` codificada (1º dígito = unidade: 0 min, 1 h, 2 dias, 3 meses, 4 anos, 5 = 100+) | Unidades 0–3 = 0 anos; vazio e 999 = ignorada; agrupada em 9 faixas | Faixa etária é o terceiro eixo interseccional |
 | 5 | `RACACOR` vazio ou fora do domínio | Mapeado para 9 = Ignorada; flag `negra` = preta + parda | Segue o critério IBGE/FBSP; ignorados ficam visíveis em vez de sumir |
 | 6 | `CAUSABAS` com 4 caracteres (X954) | Agrupada pelo meio da agressão (arma de fogo, cortante, …) | Dimensão analítica útil e de baixa cardinalidade |
 | 7 | `CODMUNOCOR` com 6 dígitos (sem dígito verificador) | Junção com `cod_ibge // 10`; sem correspondência → "NÃO INFORMADO" da UF (2 primeiros dígitos); sem UF válida → descarte contado | Usa o município de **ocorrência** (comparável ao registro policial da SINESP) |
@@ -104,7 +102,7 @@ A SINESP traz **gênero** mas não traz **raça/cor**. O SIM traz raça/cor. Por
 
 O processo é um ETL em Python (pandas) em três camadas, uma por módulo:
 
-1. **Extração** (`extract.py`): baixa as fontes automáticas e grava `manifest.json` com o SHA-256 de cada arquivo bruto. Os brutos nunca são alterados.
+1. **Extração** (`extract.py`): baixa as três fontes dos links oficiais, extrai os ZIPs do SIM (padronizando 2022/2023) e grava `manifest.json` com o SHA-256 de cada arquivo. Os arquivos oficiais nunca são alterados.
 2. **Tratamento** (`transform_sinesp.py`, `transform_sim.py`, `dimensoes.py`): aplica as regras das tabelas acima. Cada etapa registra quantas linhas entraram e saíram.
 3. **Carga** (`load.py`): executa o DDL e carrega com `COPY`, o método mais rápido do PostgreSQL, numa transação única.
 
@@ -169,4 +167,5 @@ As contagens por tabela e o espaço ocupado ficam na seção 4 de `docs/relatori
 
 - **Windows com Smart App Control:** o `python.exe` do `.venv` e as DLLs de numpy 2.5 / pandas 3.0 foram bloqueados. As versões foram fixadas em `requirements.txt` e o pipeline roda com o Python 3.12 do uv apontando para `.venv/Lib/site-packages` (ver `scripts/finalizar_entrega.ps1`).
 - **Aliases adicionados** (6 nomes da SINESP sem par no IBGE → 0): Barão de Monte Alto/MG, Santo Antônio do Leverger/MT, Arês/RN, Açu/RN, São Luiz/RR e Gracho Cardoso/SE.
-- **Limitação conhecida — DF:** o DF informa uma linha por Região Administrativa com o mesmo município (BRASÍLIA). A remoção de duplicatas exatas descarta parte dessas linhas: de 5 a 19 feminicídios por ano no total nacional (< 1,5%). A medição está em `docs/impacto_duplicatas.csv`.
+- **Corrigido após revisão adversarial:** (1) DF por Região Administrativa (ver decisão 7; medição em `docs/impacto_duplicatas.csv`); (2) idade em minutos era classificada como ignorada; (3) filtro de CID por regex; (4) linhagem do ZIP oficial do SIM na `meta_carga`; (5) consulta de tamanho em `03_verificacao.sql` contava índices duas vezes.
+- **Granularidade:** estupro e estupro de vulnerável só existem por UF na SINESP (100% em "NÃO INFORMADO" municipal).

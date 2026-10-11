@@ -1,6 +1,6 @@
 # Relatório de tratamento e carga
 
-Gerado automaticamente por `run_pipeline.py` em 10/10/2026 22:23.
+Gerado automaticamente por `run_pipeline.py` em 10/10/2026 23:37.
 
 ## 1. Versão original utilizada (data/raw/manifest.json)
 
@@ -12,9 +12,11 @@ Gerado automaticamente por `run_pipeline.py` em 10/10/2026 22:23.
 | SINESP-VDE | `sinesp/BancoVDE 2022.xlsx` | 24.4 MB | `f5561304e9569bc9` |
 | SINESP-VDE | `sinesp/BancoVDE 2023.xlsx` | 24.4 MB | `33baf9e4d2ad1052` |
 | SINESP-VDE | `sinesp/BancoVDE 2024.xlsx` | 24.4 MB | `87deaea4473cfede` |
+| SIM | `sim/DO24OPEN_csv.zip` | 98.1 MB | `13db250c90908e85` |
 | SIM | `sim/Mortalidade_Geral_2019.csv` | 459.9 MB | `05acd2eea5029af6` |
 | SIM | `sim/Mortalidade_Geral_2020.csv` | 531.9 MB | `2fdd9fcc8924d8da` |
 | SIM | `sim/Mortalidade_Geral_2021.csv` | 632.7 MB | `79cfbfff330f3ee5` |
+| SIM | `sim/Mortalidade_Geral_2021_csv.zip` | 106.7 MB | `6a8fe8077cf11cbf` |
 | SIM | `sim/Mortalidade_Geral_2022.csv` | 44.5 MB | `e0c5c0bc97d1a188` |
 | SIM | `sim/Mortalidade_Geral_2022_csv.zip` | 86.9 MB | `10b37a98b9c2ef56` |
 | SIM | `sim/Mortalidade_Geral_2023.csv` | 42.3 MB | `28db720ab8fd71f2` |
@@ -34,11 +36,12 @@ Gerado automaticamente por `run_pipeline.py` em 10/10/2026 22:23.
 | Linhas do escopo com 'faixa_etaria' preenchida (coluna descartada) | 0 |
 | Linhas sem quebra por sexo → total atribuído a 'Não informado' | 0 |
 | Linhas com soma por sexo ≠ total_vitima (mantida a quebra por sexo) | 0 |
-| Duplicatas exatas removidas | 13.743 |
+| Linhas repetidas no mesmo arquivo (mantidas: DF informa por Região Administrativa) | 13.743 |
+| Duplicatas entre arquivos removidas | 0 |
 | Linhas descartadas por UF inválida | 0 |
 | Nomes de município sem correspondência no IBGE (→ 'NÃO INFORMADO' da UF) | 0 |
 | Linhas no fato_vitimas_sinesp (grão final) | 233.988 |
-| Total de vítimas no fato (conferência) | 965.890 |
+| Total de vítimas no fato (conferência) | 968.489 |
 
 ## 3. SIM/DataSUS — rastro do tratamento
 
@@ -50,7 +53,7 @@ Gerado automaticamente por `run_pipeline.py` em 10/10/2026 22:23.
 | Após recorte 2019–2024 | 22.691 |
 | Código de município sem correspondência (→ 'NÃO INFORMADO' da UF) | 1 |
 | Descartadas sem UF identificável | 0 |
-| Linhas no fato_obitos_agressao_sim (grão final) | 22.006 |
+| Linhas no fato_obitos_agressao_sim (grão final) | 22.005 |
 | Total de óbitos no fato (conferência) | 22.691 |
 
 ## 4. Base armazenada (schema `vde`)
@@ -66,10 +69,10 @@ Gerado automaticamente por `run_pipeline.py` em 10/10/2026 22:23.
 | dim_evento | 8 | 40 KB |
 | dim_meio_agressao | 6 | 40 KB |
 | fato_vitimas_sinesp | 233.988 | 21392 KB |
-| fato_obitos_agressao_sim | 22.006 | 2592 KB |
-| meta_carga | 13 | 24 KB |
+| fato_obitos_agressao_sim | 22.005 | 2592 KB |
+| meta_carga | 13 | 32 KB |
 
-**Espaço total ocupado:** 26.01 MB de 1.024 MB do Free Tier (2.54%).
+**Espaço total ocupado:** 26.02 MB de 1.024 MB do Free Tier (2.54%).
 
 ### Campos e tipos (lidos do information_schema)
 
@@ -125,4 +128,6 @@ Gerado automaticamente por `run_pipeline.py` em 10/10/2026 22:23.
 | meta_carga | tamanho_bytes | bigint | NO |
 | meta_carga | linhas_lidas | bigint | NO |
 | meta_carga | linhas_apos_filtro | bigint | NO |
+| meta_carga | arquivo_origem | character varying | YES |
+| meta_carga | sha256_origem | character | YES |
 | meta_carga | executado_em | timestamp with time zone | NO |

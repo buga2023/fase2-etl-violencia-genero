@@ -1,0 +1,39 @@
+ENTREGA TÉCNICA — FASE 2
+Unificação, Tratamento, Modelagem e Armazenamento dos Dados
+Tema: Monitoramento de Segurança Pública e Feminicídio Interseccional
+Aluno: Gustavo Souza Santos
+Repositório: https://github.com/buga2023/fase2-etl-violencia-genero
+
+ARQUIVOS
+- Entrega_Fase2_Gustavo_Souza_Santos.pdf (e .docx, mesmo conteúdo)
+    Documento da entrega, organizado pelos 3 entregáveis da solicitação:
+    1. Base de dados tratada: origem, versão original (SHA-256), versão resultante,
+       decisões e justificativas.
+    2. Processo de tratamento: ETL em Python, módulos, decisões técnicas, testes e
+       como reproduzir.
+    3. Base armazenada no banco (Aiven for PostgreSQL): estrutura, tabelas, campos
+       e tipos, relacionamentos e quantidade de dados.
+    Inclui checagem de sanidade contra o Anuário do FBSP e o Atlas da Violência,
+    e as limitações conhecidas.
+
+- codigo_fase2_etl.zip
+    Cópia do repositório (código ETL, SQL, testes, CSVs tratados e relatórios).
+    Não inclui a credencial do banco nem os arquivos brutos (cerca de 2,6 GB),
+    que são baixados pelo próprio pipeline dos portais oficiais; o arquivo
+    data/raw/manifest.json registra o SHA-256 de cada um.
+
+- evidencias/
+    relatorio_tratamento.md   rastro do tratamento: linhas lidas, filtradas e
+                              carregadas em cada etapa
+    verificacao_banco.md      saída do sql/03_verificacao.sql executado no Aiven
+                              (contagens, tamanho, campos e tipos, FKs, linhagem
+                              e amostra da view interseccional)
+    impacto_duplicatas.csv    medição da correção das linhas do DF (seção 4.1)
+    diagrama_estrela.png      modelo do banco
+    manifest.json             SHA-256 de cada arquivo original
+
+COMO REPRODUZIR
+    pip install -r requirements.txt
+    copiar .env.example para .env e preencher DATABASE_URL (Service URI do Aiven)
+    python run_pipeline.py
+    python -m scripts.verificar_banco
