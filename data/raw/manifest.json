@@ -43,6 +43,13 @@
   },
   {
     "fonte": "SIM",
+    "arquivo": "sim/DO24OPEN_csv.zip",
+    "tamanho_bytes": 98076266,
+    "sha256": "13db250c90908e85d1ef9fb9cd7caa08583fb1912108b0f3260605aca0e9b787",
+    "modificado_em": "2026-10-10T22:46:29.239752+00:00"
+  },
+  {
+    "fonte": "SIM",
     "arquivo": "sim/Mortalidade_Geral_2019.csv",
     "tamanho_bytes": 459888156,
     "sha256": "05acd2eea5029af661ba5b6873d0bbcfa7b7c947067da0bc27899cf7d27203f5",
@@ -61,6 +68,13 @@
     "tamanho_bytes": 632732700,
     "sha256": "79cfbfff330f3ee545a0417ddf969e3d3cff4caa3f67ca2bdbc8fad9e459b424",
     "modificado_em": "2025-10-21T18:28:58+00:00"
+  },
+  {
+    "fonte": "SIM",
+    "arquivo": "sim/Mortalidade_Geral_2021_csv.zip",
+    "tamanho_bytes": 106736013,
+    "sha256": "6a8fe8077cf11cbf2ae8d783d4b786968de4e7606ca52c2a04c97d864aa89e4f",
+    "modificado_em": "2026-10-10T22:45:51.099657+00:00"
   },
   {
     "fonte": "SIM",
