@@ -27,7 +27,8 @@ def carregar(url: str, tabelas: dict[str, pd.DataFrame], cargas: list[dict]) -> 
         # SERIAL não avança com valores explícitos: realinha a sequência
         cur.execute("SELECT setval('vde.dim_municipio_id_municipio_seq', (SELECT MAX(id_municipio) FROM vde.dim_municipio))")
         _copy(cur, "meta_carga", pd.DataFrame(cargas)[
-            ["fonte", "arquivo", "sha256", "tamanho_bytes", "linhas_lidas", "linhas_apos_filtro"]])
+            ["fonte", "arquivo", "sha256", "tamanho_bytes", "linhas_lidas", "linhas_apos_filtro",
+          "arquivo_origem", "sha256_origem"]])
         cur.execute((cfg.DIR_SQL / "02_views.sql").read_text(encoding="utf-8"))
         cur.execute("ANALYZE")  # atualiza estatísticas do planejador
 

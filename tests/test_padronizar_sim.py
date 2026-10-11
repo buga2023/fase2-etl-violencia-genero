@@ -31,3 +31,12 @@ def test_layout_2023_com_contador(tmp_path):
     destino = tmp_path / "out.csv"
     padronizar(_zip(tmp_path, [";".join(campos)]), destino, 2023)
     assert destino.read_text(encoding="latin-1").splitlines()[1] == "01122023;430;2;2;Y09;292740"
+
+
+def test_linha_curta_falha(tmp_path):
+    import pytest
+    campos = [""] * 87
+    campos[2], campos[45], campos[19] = "05-03-2022", "X954", "355030"
+    origem = _zip(tmp_path, [";".join(campos), "1;2;05-03-2022"])
+    with pytest.raises(ValueError, match="1 linha"):
+        padronizar(origem, tmp_path / "out.csv", 2022)

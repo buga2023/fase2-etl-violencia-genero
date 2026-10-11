@@ -81,7 +81,12 @@ def main():
     for fonte, lista in (("SINESP-VDE", carga_sinesp), ("SIM", carga_sim)):
         for c in lista:
             m = hash_por_arquivo[c["arquivo"]]
-            cargas.append({**c, "fonte": fonte, "sha256": m["sha256"], "tamanho_bytes": m["tamanho_bytes"]})
+            # arquivo derivado (SIM 2022/2023 padronizado): registra também o ZIP oficial
+            oficial = {f"Mortalidade_Geral_{a}.csv": z for a, (_, z) in cfg.SIM_FONTES.items()}.get(c["arquivo"])
+            origem = hash_por_arquivo.get(oficial) if oficial and oficial != c["arquivo"] else None
+            cargas.append({**c, "fonte": fonte, "sha256": m["sha256"], "tamanho_bytes": m["tamanho_bytes"],
+                           "arquivo_origem": origem["arquivo"].split("/", 1)[1] if origem else None,
+                           "sha256_origem": origem["sha256"] if origem else None})
     ibge = next(m for m in manifesto if m["fonte"] == "IBGE")
     cargas.append({"fonte": "IBGE", "arquivo": ibge["arquivo"].split("/", 1)[1], "sha256": ibge["sha256"],
                    "tamanho_bytes": ibge["tamanho_bytes"], "linhas_lidas": len(tabelas["dim_municipio"]) - 27,

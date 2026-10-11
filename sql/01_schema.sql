@@ -103,7 +103,7 @@ CREATE TABLE fato_vitimas_sinesp (
 CREATE TABLE fato_obitos_agressao_sim (
     id_tempo      INTEGER  NOT NULL REFERENCES dim_tempo (id_tempo),
     id_municipio  INTEGER  NOT NULL REFERENCES dim_municipio (id_municipio),
-    id_sexo       SMALLINT NOT NULL REFERENCES dim_sexo (id_sexo),
+    id_sexo       SMALLINT NOT NULL REFERENCES dim_sexo (id_sexo) CHECK (id_sexo = 1),  -- só mulheres
     id_raca_cor   SMALLINT NOT NULL REFERENCES dim_raca_cor (id_raca_cor),
     id_faixa      SMALLINT NOT NULL REFERENCES dim_faixa_etaria (id_faixa),
     id_meio       SMALLINT NOT NULL REFERENCES dim_meio_agressao (id_meio),
@@ -129,5 +129,7 @@ CREATE TABLE meta_carga (
     tamanho_bytes       BIGINT       NOT NULL,
     linhas_lidas        BIGINT       NOT NULL,
     linhas_apos_filtro  BIGINT       NOT NULL,
+    arquivo_origem      VARCHAR(200),                          -- arquivo oficial quando 'arquivo' é derivado
+    sha256_origem       CHAR(64),                              -- (SIM 2022/2023: ZIP sem cabeçalho → CSV padronizado)
     executado_em        TIMESTAMPTZ  NOT NULL DEFAULT now()
 );
