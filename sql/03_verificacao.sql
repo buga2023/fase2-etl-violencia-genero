@@ -17,12 +17,13 @@ UNION ALL SELECT 'meta_carga', COUNT(*) FROM meta_carga;
 -- 2. Espaço ocupado (limite do Free Tier: 1 GB)
 SELECT pg_size_pretty(SUM(pg_total_relation_size(c.oid))) AS tamanho_schema_vde
 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
-WHERE n.nspname = 'vde' AND c.relkind IN ('r', 'i');
+WHERE n.nspname = 'vde' AND c.relkind = 'r';   -- pg_total_relation_size já inclui índices e TOAST
 
 -- 3. Estrutura: campos e tipos
-SELECT table_name, column_name, data_type, is_nullable
+SELECT table_name, column_name,
+       data_type || COALESCE('(' || character_maximum_length || ')', '') AS data_type, is_nullable
 FROM information_schema.columns
-WHERE table_schema = 'vde' AND table_name NOT LIKE 'vw_%'
+WHERE table_schema = 'vde' AND table_name NOT LIKE 'vw\_%'
 ORDER BY table_name, ordinal_position;
 
 -- 4. Relacionamentos (chaves estrangeiras)
@@ -37,7 +38,8 @@ WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_schema = 'vde'
 ORDER BY 1, 2;
 
 -- 5. Linhagem: versão original de cada arquivo carregado
-SELECT fonte, arquivo, LEFT(sha256, 12) AS sha256, linhas_lidas, linhas_apos_filtro, executado_em
+SELECT fonte, arquivo, LEFT(sha256, 12) AS sha256, arquivo_origem, LEFT(sha256_origem, 12) AS sha256_origem,
+       linhas_lidas, linhas_apos_filtro, executado_em
 FROM meta_carga ORDER BY id_carga;
 
 -- 6. Amostra do cruzamento interseccional

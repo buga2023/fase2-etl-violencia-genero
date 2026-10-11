@@ -29,6 +29,7 @@ CREATE OR REPLACE VIEW vw_comparativo_uf_ano AS
 WITH sinesp AS (
     SELECT t.ano, m.cod_uf,
            SUM(f.qt_vitimas) FILTER (WHERE e.violencia_genero AND e.grupo = 'Letal') AS feminicidios,
+           SUM(f.qt_vitimas) FILTER (WHERE e.violencia_genero AND e.grupo = 'Letal' AND s.codigo = 'F') AS feminicidios_f,
            SUM(f.qt_vitimas) FILTER (WHERE e.grupo = 'Letal' AND s.codigo = 'F')     AS vitimas_letais_mulheres
     FROM fato_vitimas_sinesp f
     JOIN dim_tempo t     ON t.id_tempo = f.id_tempo
@@ -47,7 +48,8 @@ WITH sinesp AS (
     GROUP BY t.ano, m.cod_uf
 )
 SELECT COALESCE(a.ano, b.ano) AS ano, u.sigla AS uf, u.regiao,
-       COALESCE(a.feminicidios, 0)              AS feminicidios_sinesp,
+       COALESCE(a.feminicidios, 0)              AS feminicidios_sinesp,          -- todas as vítimas registradas
+       COALESCE(a.feminicidios_f, 0)            AS feminicidios_mulheres_sinesp, -- só sexo feminino (comparável ao SIM)
        COALESCE(a.vitimas_letais_mulheres, 0)   AS vitimas_letais_mulheres_sinesp,
        COALESCE(b.obitos_agressao_mulheres, 0)  AS obitos_agressao_mulheres_sim,
        COALESCE(b.obitos_mulheres_negras, 0)    AS obitos_mulheres_negras_sim,

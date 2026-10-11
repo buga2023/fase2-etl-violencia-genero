@@ -53,7 +53,9 @@ def main() -> None:
     md = ["# Verificação do banco (sql/03_verificacao.sql)", "",
           f"Executado em {datetime.now():%d/%m/%Y %H:%M}.", ""]
     dados = {"executado_em": datetime.now().isoformat(timespec="seconds"),
-             "aiven": host.endswith("aivencloud.com")}
+             "aiven": host.endswith("aivencloud.com"),
+             # identifica o serviço sem expor o nome completo do host
+             "host_mascarado": host[:7] + "…" + host[host.find(".", 0):] if "." in host else ""}
     with psycopg.connect(url) as con, con.cursor() as cur:
         cur.execute("SELECT version()")
         dados["versao"] = cur.fetchone()[0]
