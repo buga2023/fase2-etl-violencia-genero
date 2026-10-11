@@ -13,12 +13,21 @@ CHUNK_SIZE = 200_000                       # leitura do SIM em blocos
 
 # ---------------------------------------------------------------- fontes
 URL_IBGE_MUNICIPIOS = "https://servicodados.ibge.gov.br/api/v1/localidades/municipios?view=nivelado"
-# OpenDataSUS — Declarações de Óbito (CSV nacional por ano, separador ';').
-# Confira o link no portal se o padrão mudar: https://opendatasus.saude.gov.br/dataset/sim
-URL_SIM_CSV = "https://diaad.s3.sa-east-1.amazonaws.com/sim/Mortalidade_Geral_{ano}.csv"
-# SINESP-VDE: baixar manualmente os arquivos "BancoVDE <ano>.xlsx" do dataset
-# "Sistema Nacional de Estatísticas de Segurança Pública" em dados.mj.gov.br
-# e salvar em data/raw/sinesp/ (o portal bloqueia download automatizado).
+# OpenDataSUS — Declarações de Óbito (CSV nacional por ano, separador ';'). ano: (URL, arquivo oficial)
+# Recursos listados em https://dadosabertos.saude.gov.br/dataset/sim (links conferidos em out/2026).
+# ZIPs de 2022 e 2023 vêm sem cabeçalho: etl/padronizar_sim.py gera o CSV que o ETL lê.
+_S3_SIM = "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/csv/"
+SIM_FONTES = {
+    2019: ("https://diaad.s3.sa-east-1.amazonaws.com/sim/Mortalidade_Geral_2019.csv", "Mortalidade_Geral_2019.csv"),
+    2020: ("https://diaad.s3.sa-east-1.amazonaws.com/sim/Mortalidade_Geral_2020.csv", "Mortalidade_Geral_2020.csv"),
+    2021: (_S3_SIM + "Mortalidade_Geral_2021_csv.zip", "Mortalidade_Geral_2021_csv.zip"),
+    2022: (_S3_SIM + "Mortalidade_Geral_2022_csv.zip", "Mortalidade_Geral_2022_csv.zip"),
+    2023: (_S3_SIM + "Mortalidade_Geral_2023_csv.zip", "Mortalidade_Geral_2023_csv.zip"),
+    2024: (_S3_SIM + "DO24OPEN_csv.zip", "DO24OPEN_csv.zip"),   # preliminar
+}
+# SINESP-VDE: "BancoVDE <ano>.xlsx" no gov.br/mj (o antigo dados.mj.gov.br saiu do ar).
+URL_SINESP = ("https://www.gov.br/mj/pt-br/assuntos/sua-seguranca/seguranca-publica/estatistica/"
+              "download/dnsp-base-de-dados/bancovde-{ano}.xlsx/@@download/file")
 
 # ---------------------------------------------------------------- SINESP
 # Eventos mantidos (comparação sem acento/caixa). grupo, violencia_genero
