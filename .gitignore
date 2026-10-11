@@ -1,0 +1,14 @@
+.env
+__pycache__/
+.pytest_cache/
+# brutos são grandes (SIM ~ centenas de MB/ano): ficam fora do git; o manifest.json registra a versão
+data/raw/**/*.csv
+data/raw/**/*.xlsx
+data/raw/**/*.parquet
+data/raw/**/*.part
+!data/raw/**/.gitkeep
+data/raw/**/*.zip
+.venv/
+data/raw/**/*.json
+!data/raw/manifest.json
+node_modules/

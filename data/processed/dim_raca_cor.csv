@@ -1,0 +1,7 @@
+id_raca_cor,descricao,negra
+1,Branca,False
+2,Preta,True
+3,Amarela,False
+4,Parda,True
+5,Indígena,False
+9,Ignorada,False

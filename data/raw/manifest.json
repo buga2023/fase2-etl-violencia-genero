@@ -1,0 +1,107 @@
+[
+  {
+    "fonte": "SINESP-VDE",
+    "arquivo": "sinesp/BancoVDE 2019.xlsx",
+    "tamanho_bytes": 24230875,
+    "sha256": "01d5cefb6459dadd08824e14353bba203f53c2f94e942b8b2836594b13c49bb2",
+    "modificado_em": "2026-10-10T22:43:01.679059+00:00"
+  },
+  {
+    "fonte": "SINESP-VDE",
+    "arquivo": "sinesp/BancoVDE 2020.xlsx",
+    "tamanho_bytes": 24285295,
+    "sha256": "7648a93a473d366f66940735190c5d89be24e3cdaa705c088975332b6cb8d39f",
+    "modificado_em": "2026-10-10T22:43:10.719661+00:00"
+  },
+  {
+    "fonte": "SINESP-VDE",
+    "arquivo": "sinesp/BancoVDE 2021.xlsx",
+    "tamanho_bytes": 24343073,
+    "sha256": "babdbbbc71c427e32ebad2255657182f79d4de5525adfcbcac332e3f2f7dcd9d",
+    "modificado_em": "2026-10-10T22:43:19.495726+00:00"
+  },
+  {
+    "fonte": "SINESP-VDE",
+    "arquivo": "sinesp/BancoVDE 2022.xlsx",
+    "tamanho_bytes": 24358662,
+    "sha256": "f5561304e9569bc9f5ba573598812feaea15dfd06cf9501e5677cd8db923ab3e",
+    "modificado_em": "2026-10-10T22:43:27.908793+00:00"
+  },
+  {
+    "fonte": "SINESP-VDE",
+    "arquivo": "sinesp/BancoVDE 2023.xlsx",
+    "tamanho_bytes": 24375927,
+    "sha256": "33baf9e4d2ad10520b68e585c55effba096231bf5924eed8d62fd59c671262de",
+    "modificado_em": "2026-10-10T22:43:36.383373+00:00"
+  },
+  {
+    "fonte": "SINESP-VDE",
+    "arquivo": "sinesp/BancoVDE 2024.xlsx",
+    "tamanho_bytes": 24388231,
+    "sha256": "87deaea4473cfede9de9333e4cd9f1bc365b1ada183012f2364054c28ac563d5",
+    "modificado_em": "2026-10-10T22:43:45.110065+00:00"
+  },
+  {
+    "fonte": "SIM",
+    "arquivo": "sim/Mortalidade_Geral_2019.csv",
+    "tamanho_bytes": 459888156,
+    "sha256": "05acd2eea5029af661ba5b6873d0bbcfa7b7c947067da0bc27899cf7d27203f5",
+    "modificado_em": "2026-10-10T22:41:32.571138+00:00"
+  },
+  {
+    "fonte": "SIM",
+    "arquivo": "sim/Mortalidade_Geral_2020.csv",
+    "tamanho_bytes": 531920502,
+    "sha256": "2fdd9fcc8924d8da0db6f816d528a9221a56164c8e494803ce0085368c07464f",
+    "modificado_em": "2026-10-10T22:41:57.061742+00:00"
+  },
+  {
+    "fonte": "SIM",
+    "arquivo": "sim/Mortalidade_Geral_2021.csv",
+    "tamanho_bytes": 632732700,
+    "sha256": "79cfbfff330f3ee545a0417ddf969e3d3cff4caa3f67ca2bdbc8fad9e459b424",
+    "modificado_em": "2025-10-21T18:28:58+00:00"
+  },
+  {
+    "fonte": "SIM",
+    "arquivo": "sim/Mortalidade_Geral_2022.csv",
+    "tamanho_bytes": 44518165,
+    "sha256": "e0c5c0bc97d1a188f5b2fad15e87c1b3db3c6064ea5190a89006e978989e2a93",
+    "modificado_em": "2026-10-10T22:52:45.493982+00:00"
+  },
+  {
+    "fonte": "SIM",
+    "arquivo": "sim/Mortalidade_Geral_2022_csv.zip",
+    "tamanho_bytes": 86893401,
+    "sha256": "10b37a98b9c2ef56e3ee672abc20b39b87c96f5e9ca3ac8cfe456553caa40b85",
+    "modificado_em": "2026-10-10T22:46:02.907832+00:00"
+  },
+  {
+    "fonte": "SIM",
+    "arquivo": "sim/Mortalidade_Geral_2023.csv",
+    "tamanho_bytes": 42255993,
+    "sha256": "28db720ab8fd71f264695e35bdcee98bf627aa0e84d0709e77d3d8787729159c",
+    "modificado_em": "2026-10-10T22:53:24.864072+00:00"
+  },
+  {
+    "fonte": "SIM",
+    "arquivo": "sim/Mortalidade_Geral_2023_csv.zip",
+    "tamanho_bytes": 86857009,
+    "sha256": "9a14ef4355b7097c1be3307cebfe69d4d9d1c248b9842add041389345e35c184",
+    "modificado_em": "2026-10-10T22:46:14.678689+00:00"
+  },
+  {
+    "fonte": "SIM",
+    "arquivo": "sim/Mortalidade_Geral_2024.csv",
+    "tamanho_bytes": 550842628,
+    "sha256": "be397f348a6ad25c69cc138b2c4268cb0a4252c707e7603dbcb4178ab81c66a0",
+    "modificado_em": "2026-02-18T20:25:58+00:00"
+  },
+  {
+    "fonte": "IBGE",
+    "arquivo": "ibge/municipios.json",
+    "tamanho_bytes": 2372050,
+    "sha256": "77bf68d9f5b1237522bcd28c39b8857725ebb25e913a5b13aa4a740ce67041b4",
+    "modificado_em": "2026-10-10T22:41:13.965349+00:00"
+  }
+]

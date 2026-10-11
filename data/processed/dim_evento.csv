@@ -1,0 +1,9 @@
+id_evento,nome,grupo,violencia_genero
+1,Feminicídio,Letal,True
+2,Homicídio doloso,Letal,False
+3,Lesão corporal seguida de morte,Letal,False
+4,Roubo seguido de morte (latrocínio),Letal,False
+5,Tentativa de feminicídio,Tentativa,True
+6,Tentativa de homicídio,Tentativa,False
+7,Estupro,Sexual,False
+8,Estupro de vulnerável,Sexual,False

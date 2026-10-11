@@ -1,0 +1,6 @@
+{
+  "name": "entrega-fase2",
+  "private": true,
+  "description": "Gera o documento da Entrega Técnica Fase 2 (DOCX + HTML/PDF)",
+  "dependencies": { "docx": "9.5.1" }
+}
