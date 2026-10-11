@@ -85,11 +85,17 @@ def transformar(arquivos, dim_municipio: pd.DataFrame, dim_evento: pd.DataFrame)
     log.append((f"Linhas sem quebra por sexo → total atribuído a 'Não informado'", int(sem_quebra.sum())))
     log.append((f"Linhas com soma por sexo ≠ total_vitima (mantida a quebra por sexo)", divergentes))
 
-    # 5. duplicatas exatas (mesma linha em dois arquivos/abas)
+    # 5. duplicatas: mesma linha publicada em dois arquivos. Linhas idênticas DENTRO do
+    #    mesmo arquivo são registros distintos (o DF informa uma linha por Região
+    #    Administrativa, todas como 'BRASÍLIA') e por isso são mantidas e somadas.
     chave_dup = [c for c in df.columns if c != "arquivo"]
+    repetidas = df.duplicated(subset=chave_dup + ["arquivo"], keep="first")
+    log.append(("Linhas repetidas no mesmo arquivo (mantidas: DF informa por Região Administrativa)",
+                int(repetidas.sum())))
+    df["_ocorrencia"] = df.groupby(chave_dup + ["arquivo"], dropna=False, sort=False).cumcount()
     antes = len(df)
-    df = df.drop_duplicates(subset=chave_dup)
-    log.append(("Duplicatas exatas removidas", antes - len(df)))
+    df = df.drop_duplicates(subset=chave_dup + ["_ocorrencia"]).drop(columns="_ocorrencia")
+    log.append(("Duplicatas entre arquivos removidas", antes - len(df)))
 
     # 6. município → dim_municipio
     df["uf"] = df["uf"].astype(str).str.strip().str.upper()

@@ -15,6 +15,7 @@ MUNICIPIOS = [  # cod IBGE, nome, UF-id, UF-sigla
     (2919207, "Lauro de Freitas", 29, "BA"), (3550308, "São Paulo", 35, "SP"),
     (3515004, "Embu das Artes", 35, "SP"), (3304557, "Rio de Janeiro", 33, "RJ"),
     (2611606, "Recife", 26, "PE"), (4317103, "Sant'Ana do Livramento", 43, "RS"),
+    (5300108, "Brasília", 53, "DF"),
 ]
 
 COLS_VDE = ["uf", "municipio", "evento", "data_referencia", "agente", "arma", "faixa_etaria",
@@ -38,7 +39,8 @@ def gerar(raw: Path):
     vde_2019 = [
         _vde("BA", "Salvador", "Feminicídio", d(2019, 3, 1), 2, 0, 0, 2),
         _vde("BA", "Salvador", "Homicídio doloso", d(2019, 3, 1), 5, "1.050", 1, "1.056"),  # texto c/ milhar
-        _vde("BA", "Salvador", "Homicídio doloso", d(2019, 3, 1), 5, "1.050", 1, "1.056"),  # duplicata exata
+        _vde("DF", "Brasília", "Feminicídio", d(2019, 9, 1), 1, 0, 0, 1),                   # DF: uma linha por RA,
+        _vde("DF", "Brasília", "Feminicídio", d(2019, 9, 1), 1, 0, 0, 1),                   # idênticas e legítimas
         _vde("ba ", "FEIRA DE SANTANA", "FEMINICIDIO", d(2019, 4, 1), 1, 0, 0, 1),          # caixa/acentos
         _vde("SP", "Embu", "Estupro", d(2019, 5, 1), 3, 1, 0, 4),                           # alias IBGE
         _vde("RS", "Santana do Livramento", "Feminicídio", d(2019, 6, 1), 1, 0, 0, 1),      # apóstrofo
@@ -51,6 +53,7 @@ def gerar(raw: Path):
     ]
     vde_2020 = [
         _vde("RJ", "Rio de Janeiro", "Feminicídio", d(2020, 1, 1), 6, 0, 0, 6),
+        _vde("BA", "Salvador", "Homicídio doloso", d(2019, 3, 1), 5, "1.050", 1, "1.056"),  # mesma linha em outro arquivo
         _vde("RJ", "Rio de Janeiro", "Homicídio doloso", d(2020, 1, 1), 10, 90, 0, 101),    # soma ≠ total
     ]
     pd.DataFrame(vde_2019, columns=COLS_VDE).to_excel(raw / "sinesp" / "BancoVDE 2019.xlsx", index=False)
