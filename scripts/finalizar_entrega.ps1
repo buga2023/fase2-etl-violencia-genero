@@ -47,7 +47,7 @@ Start-Sleep -Seconds 3
 Remove-Item $html -ErrorAction SilentlyContinue
 $evid = Join-Path $saida "evidencias"
 New-Item -ItemType Directory -Force $evid | Out-Null
-Copy-Item docs\entrega\LEIA-ME.txt $saida -Force
+Copy-Item docs\entrega\LEIA-ME.txt, dashboard\painel_feminicidio_interseccional.html, docs\relatorio\Relatorio_Fase2_Gustavo_Santos_Mateus_Bulhoes.pdf $saida -Force
 Copy-Item docs\relatorio_tratamento.md, docs\verificacao_banco.md, docs\impacto_duplicatas.csv, docs\entrega\diagrama_estrela.png, data\raw\manifest.json $evid -Force
 # código versionado (sem .env nem brutos): o que está no último commit
 git archive --format=zip -o (Join-Path $saida "codigo_fase2_etl.zip") HEAD
