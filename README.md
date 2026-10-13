@@ -16,6 +16,7 @@ cp .env.example .env                 # cole a Service URI do Aiven em DATABASE_U
 python run_pipeline.py               # baixa IBGE + SINESP + SIM (~2,6 GB), trata, carrega e gera docs/relatorio_tratamento.md
 python -m scripts.verificar_banco    # roda sql/03_verificacao.sql e grava docs/verificacao_banco.md
 python -m pytest -q tests            # testes das regras de tratamento
+python dashboard/gerar_painel.py     # reconstrói o painel HTML (abre local, sem servidor)
 ```
 
 Opções: `--sem-download` (usa só o que já está em `data/raw/`) e `--sem-banco` (trata e gera os CSVs tratados sem carregar).
@@ -42,6 +43,8 @@ A carga é **idempotente**: recria o schema e recarrega tudo numa única transa�
 │   ├── verificar_banco.py     executa sql/03_verificacao.sql sem precisar de psql
 │   └── finalizar_entrega.ps1  carga no Aiven → evidências → documento DOCX/PDF em Downloads
 ├── tests/                     dados sintéticos no formato das fontes + testes (pytest)
+├── dashboard/                 gerar_painel.py + template.html → painel_feminicidio_interseccional.html
+├── docs/relatorio/            relatório explicativo (HTML + PDF) com fontes embutidas
 ├── data/raw/                  versão ORIGINAL (fora do git) + manifest.json (dentro)
 ├── data/processed/            versão TRATADA em CSV (uma tabela por arquivo)
 └── docs/relatorio_tratamento.md   gerado a cada execução, com os números reais

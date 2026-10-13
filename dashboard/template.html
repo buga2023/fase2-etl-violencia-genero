@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel Feminicídio Interseccional</title>
+<style>
+:root{
+  color-scheme:light;
+  --page:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--axis:#c3c2b7;--border:rgba(11,11,11,.10);
+  --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#6250d6;--s8:#e34948;
+  --seq1:#cde2fb;--seq2:#9ec5f4;--seq3:#6da7ec;--seq4:#3987e5;--seq5:#256abf;--seq6:#184f95;--seq7:#0d366b;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;--page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--axis:#383835;--border:rgba(255,255,255,.10);
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;}}
+:root[data-theme="dark"]{
+  color-scheme:dark;--page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--axis:#383835;--border:rgba(255,255,255,.10);
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--page);color:var(--ink);line-height:1.45;font-size:14px}
+.wrap{max-width:1360px;margin:0 auto;padding:16px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;margin-bottom:14px}
+h1{font-size:20px;font-weight:650;letter-spacing:-.01em}
+.sub{color:var(--ink2);font-size:13px;margin-top:2px}
+.btn{border:1px solid var(--border);background:var(--surface);color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer;font:inherit;font-size:13px}
+.btn:hover{border-color:var(--axis)}
+.filters{display:flex;flex-wrap:wrap;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:14px;align-items:flex-end}
+.f{display:flex;flex-direction:column;gap:4px;min-width:130px}
+.f label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.f select,.f input{font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--border);border-radius:8px;background:var(--page);color:var(--ink)}
+.years{display:flex;gap:4px;flex-wrap:wrap}
+.years button{padding:5px 9px;border-radius:7px;border:1px solid var(--border);background:var(--page);color:var(--ink2);cursor:pointer;font:inherit;font-size:12.5px}
+.years button.on{background:var(--ink);color:var(--page);border-color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.kpi .l{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.kpi .v{font-size:28px;font-weight:650;letter-spacing:-.02em;margin-top:4px}
+.kpi .d{font-size:12px;color:var(--ink2);margin-top:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:12px;margin-bottom:12px}
+@media (max-width:480px){.grid{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;min-width:0}
+.card h2{font-size:14px;font-weight:650;margin-bottom:2px}
+.card .note{font-size:12px;color:var(--ink2);margin-bottom:8px}
+.card.wide{grid-column:1/-1}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink2);margin-top:6px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px}
+.legend i.ln{height:2px;border-radius:1px;width:16px}
+.tip{position:fixed;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:12.5px;box-shadow:0 6px 20px rgba(0,0,0,.14);display:none;z-index:9;min-width:140px}
+.tip b{font-size:14px}
+.tip .r{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.tip .r i{display:inline-block;width:12px;height:2px;margin-right:6px;vertical-align:middle}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 8px;border-bottom:1px solid var(--axis);cursor:pointer;white-space:nowrap;user-select:none}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
+td{padding:7px 8px;border-bottom:1px solid var(--grid)}
+tbody tr:hover{background:var(--page)}
+.tbar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.tbar .pg{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--ink2)}
+.foot{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5}
+.axis text{font-size:11px;fill:var(--muted)}
+.axis line{stroke:var(--grid)}
+.axis .base{stroke:var(--axis)}
+.lbl{font-size:11.5px;fill:var(--ink2)}
+.lbl.strong{fill:var(--ink);font-weight:600}
+.hit{fill:transparent}
+.bar:hover{filter:brightness(1.12)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>Painel: violência contra a mulher e feminicídio interseccional</h1>
+    <div class="sub">Brasil, 2019 a 2024. SINESP-VDE (registros policiais) e SIM/DataSUS (óbitos de mulheres por agressão, com raça/cor). Base tratada na Fase 2.</div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="btn" id="theme">Tema escuro</button>
+    <button class="btn" id="reset">Limpar filtros</button>
+  </div>
+</header>
+
+<div class="filters" id="filters">
+  <div class="f"><label>Anos</label><div class="years" id="years"></div></div>
+  <div class="f"><label>Região</label><select id="fRegiao"><option value="">Todas</option></select></div>
+  <div class="f"><label>UF</label><select id="fUF"><option value="">Todas</option></select></div>
+  <div class="f"><label>Evento (SINESP)</label><select id="fEvento"><option value="">Todos os 8 eventos</option></select></div>
+  <div class="f"><label>Sexo da vítima (SINESP)</label><select id="fSexo"><option value="">Todos</option></select></div>
+  <div class="f"><label>Raça/cor (SIM)</label><select id="fRaca"><option value="">Todas</option><option value="negra">Negras (preta + parda)</option></select></div>
+  <div class="f"><label>Faixa etária (SIM)</label><select id="fFaixa"><option value="">Todas</option></select></div>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="l">Vítimas registradas (SINESP)</div><div class="v" id="k1">–</div><div class="d" id="k1d"></div></div>
+  <div class="kpi"><div class="l">Feminicídios (SINESP)</div><div class="v" id="k2">–</div><div class="d" id="k2d"></div></div>
+  <div class="kpi"><div class="l">Mulheres mortas por agressão (SIM)</div><div class="v" id="k3">–</div><div class="d" id="k3d"></div></div>
+  <div class="kpi"><div class="l">Mulheres negras entre os óbitos (SIM)</div><div class="v" id="k4">–</div><div class="d" id="k4d"></div></div>
+</div>
+
+<div class="grid">
+  <div class="card"><h2>Feminicídios por mês (SINESP)</h2><div class="note">Todas as vítimas registradas como feminicídio. Passe o mouse para ver o mês.</div><div id="c1"></div></div>
+  <div class="card"><h2>Mulheres mortas por agressão, por mês (SIM)</h2><div class="note">Óbitos CID-10 X85 a Y09, sexo feminino, município de ocorrência.</div><div id="c2"></div></div>
+  <div class="card"><h2>Vítimas por evento e sexo (SINESP)</h2><div class="note">Barras empilhadas. Estupro e estupro de vulnerável só existem por UF.</div><div id="c3"></div></div>
+  <div class="card"><h2>Óbitos de mulheres por raça/cor e ano (SIM)</h2><div class="note">Participação de cada raça/cor no total de cada ano.</div><div id="c4"></div></div>
+  <div class="card"><h2>Óbitos por faixa etária (SIM)</h2><div class="note">Idade da vítima na declaração de óbito.</div><div id="c5"></div></div>
+  <div class="card"><h2>Óbitos por meio de agressão (SIM)</h2><div class="note">Agrupamento da causa básica (CID-10).</div><div id="c6"></div></div>
+  <div class="card wide"><h2>Ponte interseccional por UF</h2><div class="note">Feminicídios com vítima mulher (SINESP) ao lado dos óbitos de mulheres por agressão (SIM), com o percentual de mulheres negras. É a visão vw_comparativo_uf_ano do banco.</div><div id="c7"></div></div>
+</div>
+
+<div class="card">
+  <div class="tbar">
+    <div><h2>Tabela de detalhe</h2><div class="note" style="margin:0">Clique no cabeçalho para ordenar. Respeita os filtros.</div></div>
+    <div class="pg"><select id="tMode" class="btn"><option value="uf">UF × ano (ponte interseccional)</option><option value="mun">Municípios com mais feminicídios</option><option value="meio">Raça/cor × meio de agressão (SIM)</option></select><button class="btn" id="csv">Baixar CSV</button></div>
+  </div>
+  <div style="overflow-x:auto"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+  <div class="tbar" style="margin-top:8px"><div class="pg" id="pginfo"></div><div class="pg"><button class="btn" id="prev">Anterior</button><button class="btn" id="next">Próxima</button></div></div>
+</div>
+
+<div class="foot">
+  Fontes: SINESP-VDE/MJSP (BancoVDE 2019 a 2024), SIM/DataSUS via OpenDataSUS (2024 preliminar, DO24OPEN), IBGE Localidades. Números iguais aos das tabelas fato_vitimas_sinesp e fato_obitos_agressao_sim do schema vde (Aiven PostgreSQL). "Negras" = preta + parda, critério IBGE/FBSP. Raça/cor ignorada fica no denominador. Vítimas de feminicídio com sexo masculino ou não informado (3 a 9 por ano) aparecem como vieram da origem.
+  Gerado em __DATA__ por Gustavo Souza Santos e Mateus Bulhões.
+</div>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+const D = __DATA_JSON__;
+</script>
+<script>
+const $ = s => document.querySelector(s);
+const fmt = n => Number(n).toLocaleString('pt-BR');
+const pct = (a,b) => b ? (100*a/b).toLocaleString('pt-BR',{maximumFractionDigits:1})+'%' : '–';
+const MESES = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const SERIES = ['--s1','--s2','--s3','--s4','--s5','--s6','--s7','--s8'].map(v=>`var(${v})`);
+const SEQ = [1,2,3,4,5,6,7].map(i=>`var(--seq${i})`);
+const uf = Object.fromEntries(D.uf.map(u=>[u.sigla,u]));
+const evento = Object.fromEntries(D.evento.map(e=>[e.id_evento,e]));
+const raca = Object.fromEntries(D.raca.map(r=>[r.id_raca_cor,r]));
+const faixa = Object.fromEntries(D.faixa.map(f=>[f.id_faixa,f]));
+const ANOS = [2019,2020,2021,2022,2023,2024];
+const COR_SEXO = {1:SERIES[0],2:SERIES[1],3:SERIES[3]};
+const COR_RACA = {4:SERIES[0],1:SERIES[1],2:SERIES[2],5:SERIES[3],3:SERIES[4],9:SERIES[7]};
+const ORD_RACA = [4,1,2,5,3,9];
+
+const st = {anos:new Set(ANOS), regiao:'', uf:'', evento:'', sexo:'', raca:'', faixa:''};
+
+function fillSel(id, items){ const s=$(id); for(const [v,t] of items){ const o=document.createElement('option'); o.value=v; o.textContent=t; s.appendChild(o);} }
+fillSel('#fRegiao', [...new Set(D.uf.map(u=>u.regiao))].map(r=>[r,r]));
+function fillUF(){ const s=$('#fUF'); s.length=1; D.uf.filter(u=>!st.regiao||u.regiao===st.regiao).sort((a,b)=>a.sigla.localeCompare(b.sigla)).forEach(u=>{const o=document.createElement('option');o.value=u.sigla;o.textContent=u.sigla+' · '+u.nome;s.appendChild(o);}); s.value=st.uf; if(s.value!==st.uf){st.uf='';} }
+fillUF();
+fillSel('#fEvento', D.evento.map(e=>[e.id_evento,e.nome]));
+fillSel('#fSexo', D.sexo.map(s=>[s.id_sexo,s.descricao]));
+fillSel('#fRaca', D.raca.map(r=>[r.id_raca_cor,r.descricao]));
+fillSel('#fFaixa', D.faixa.map(f=>[f.id_faixa,f.descricao]));
+const Y=$('#years'); ANOS.forEach(a=>{const b=document.createElement('button');b.textContent=a;b.className='on';b.onclick=()=>{ if(st.anos.has(a)&&st.anos.size>1) st.anos.delete(a); else st.anos.add(a); b.classList.toggle('on',st.anos.has(a)); render(); }; Y.appendChild(b);});
+const MAP={fRegiao:'regiao',fUF:'uf',fEvento:'evento',fSexo:'sexo',fRaca:'raca',fFaixa:'faixa'};
+Object.keys(MAP).forEach(id=>$('#'+id).addEventListener('change',e=>{ st[MAP[id]]=e.target.value; if(id==='fRegiao'){st.uf='';fillUF();} render(); }));
+$('#reset').onclick=()=>{ st.anos=new Set(ANOS); st.regiao=st.uf=st.evento=st.sexo=st.raca=st.faixa=''; Object.keys(MAP).forEach(id=>$('#'+id).value=''); fillUF(); [...Y.children].forEach(b=>b.classList.add('on')); render(); };
+$('#theme').onclick=()=>{ const r=document.documentElement; const dark = r.getAttribute('data-theme')==='dark' || (!r.getAttribute('data-theme') && matchMedia('(prefers-color-scheme:dark)').matches); r.setAttribute('data-theme', dark?'light':'dark'); $('#theme').textContent = dark?'Tema escuro':'Tema claro'; };
+
+function geoOk(sig){ if(st.uf) return sig===st.uf; if(st.regiao) return uf[sig].regiao===st.regiao; return true; }
+function fS(){ return D.sinesp.filter(r=>st.anos.has(r[0]) && geoOk(r[2]) && (!st.evento||r[3]==st.evento) && (!st.sexo||r[4]==st.sexo)); }
+function racaOk(id){ return st.raca===''||(st.raca==='negra'?(id==2||id==4):id==st.raca); }
+function fM(){ return D.sim.filter(r=>st.anos.has(r[0]) && geoOk(r[2]) && racaOk(r[3]) && (!st.faixa||r[4]==st.faixa)); }
+const sum=(arr,i)=>arr.reduce((s,r)=>s+r[i],0);
+const groupBy=(arr,key,vi)=>{const o=new Map();for(const r of arr){const k=key(r);o.set(k,(o.get(k)||0)+r[vi]);}return o;};
+
+const tip=$('#tip');
+function showTip(e, html){ tip.innerHTML=html; tip.style.display='block'; moveTip(e); }
+function moveTip(e){ const w=tip.offsetWidth, h=tip.offsetHeight; let x=e.clientX+14, y=e.clientY+14; if(x+w>innerWidth-8) x=e.clientX-w-14; if(y+h>innerHeight-8) y=e.clientY-h-14; tip.style.left=x+'px'; tip.style.top=y+'px'; }
+function hideTip(){ tip.style.display='none'; }
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const row=(name,color,val)=>`<div class="r"><span><i style="background:${color}"></i>${esc(name)}</span><b>${val}</b></div>`;
+
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+function niceMax(v){ if(v<=0) return 1; const p=Math.pow(10,Math.floor(Math.log10(v))); const n=v/p; const m = n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10; return m*p; }
+function yAxis(svg,x0,x1,y0,y1,max,ticks=4){ const g=el('g',{class:'axis'},svg); for(let i=0;i<=ticks;i++){ const v=max*i/ticks, y=y1-(y1-y0)*i/ticks; el('line',{x1:x0,x2:x1,y1:y,y2:y,class:i===0?'base':''},g); const t=el('text',{x:x0-6,y:y+4,'text-anchor':'end'},g); t.textContent=fmt(Math.round(v)); } }
+function legend(container, items, line){ if(items.length<2) return; const lg=document.createElement('div'); lg.className='legend'; items.forEach(([n,c])=>{const sp=document.createElement('span'); const i=document.createElement('i'); if(line) i.className='ln'; i.style.background=c; sp.appendChild(i); sp.appendChild(document.createTextNode(n)); lg.appendChild(sp);}); container.appendChild(lg); }
+
+function lineChart(container, series){
+  container.innerHTML=''; const W=600,H=230, L=52,R=14,T=14,B=30; const n=series[0].values.length;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`}); container.appendChild(svg);
+  const max=niceMax(Math.max(1,...series.flatMap(s=>s.values.map(d=>d.v))));
+  yAxis(svg,L,W-R,T,H-B,max);
+  const xs=i=> n>1 ? L+(W-L-R)*i/(n-1) : (L+W-R)/2; const ys=v=> (H-B)-(H-B-T)*v/max;
+  const ax=el('g',{class:'axis'},svg);
+  series[0].values.forEach((p,i)=>{ if(p.short){ const t=el('text',{x:xs(i),y:H-B+16,'text-anchor':'middle'},ax); t.textContent=p.short; } });
+  series.forEach(s=>{ const d=s.values.map((p,i)=>(i?'L':'M')+xs(i).toFixed(1)+' '+ys(p.v).toFixed(1)).join(' '); el('path',{d,fill:'none',stroke:s.color,'stroke-width':2,'stroke-linejoin':'round'},svg); if(n<=14) s.values.forEach((p,i)=>el('circle',{cx:xs(i),cy:ys(p.v),r:3.5,fill:s.color,stroke:'var(--surface)','stroke-width':2},svg)); });
+  if(n){ const vals=series[0].values; let mi=0; vals.forEach((p,i)=>{if(p.v>vals[mi].v) mi=i;}); const t=el('text',{x:xs(mi),y:ys(vals[mi].v)-7,class:'lbl strong','text-anchor':'middle'},svg); t.textContent=fmt(vals[mi].v)+' ('+vals[mi].label+')'; }
+  const cross=el('line',{x1:0,x2:0,y1:T,y2:H-B,stroke:'var(--axis)','stroke-width':1,style:'display:none'},svg);
+  const hit=el('rect',{x:L,y:T,width:W-L-R,height:H-B-T,class:'hit'},svg);
+  const pt=svg.createSVGPoint();
+  hit.addEventListener('pointermove',e=>{ pt.x=e.clientX;pt.y=e.clientY; const p=pt.matrixTransform(svg.getScreenCTM().inverse()); const i=Math.max(0,Math.min(n-1,Math.round((p.x-L)/((W-L-R)/Math.max(1,n-1))))); cross.setAttribute('x1',xs(i));cross.setAttribute('x2',xs(i));cross.style.display=''; showTip(e,`<b>${esc(series[0].values[i].label)}</b>`+series.map(s=>row(s.name,s.color,fmt(s.values[i].v))).join('')); });
+  hit.addEventListener('pointerleave',()=>{cross.style.display='none';hideTip();});
+  legend(container, series.map(s=>[s.name,s.color]), true);
+}
+
+function hBars(container, rows, opts={}){
+  container.innerHTML=''; const W=600, rh=opts.rh||26, L=opts.L||150, R=64, T=6; const H=T+rows.length*rh+10;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`}); container.appendChild(svg);
+  const max=Math.max(1,...rows.map(r=>r.segs.reduce((s,x)=>s+x.v,0)));
+  const xs=v=>(W-L-R)*v/max;
+  rows.forEach((r,i)=>{ const y=T+i*rh; const t=el('text',{x:L-8,y:y+rh/2+4,'text-anchor':'end',class:'lbl'},svg); t.textContent=r.label; let x=L; const tot=r.segs.reduce((s,x)=>s+x.v,0);
+    const vis=r.segs.filter(s=>s.v);
+    vis.forEach((s,j)=>{ const w=xs(s.v); const last=j===vis.length-1; const rc=el('rect',{x:x+(j?1:0),y:y+5,width:Math.max(0,w-(j?1:0)),height:rh-10,fill:s.color,class:'bar',rx:last?4:0},svg); rc.addEventListener('pointermove',e=>showTip(e,`<b>${esc(r.label)}</b>`+row(s.name,s.color,fmt(s.v))+(vis.length>1?`<div class="r"><span>Total</span><b>${fmt(tot)}</b></div><div class="r"><span>Participação</span><b>${pct(s.v,tot)}</b></div>`:''))); rc.addEventListener('pointerleave',hideTip); x+=w; });
+    const tv=el('text',{x:x+6,y:y+rh/2+4,class:'lbl'},svg); tv.textContent=fmt(tot); });
+  legend(container, [...new Map(rows.flatMap(r=>r.segs).map(s=>[s.name,s.color]))]);
+}
+
+function stack100(container, cols){
+  container.innerHTML=''; const W=600,H=230,L=40,R=12,T=10,B=28; const n=cols.length; const cw=(W-L-R)/n; const bw=Math.min(56,cw*0.6);
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`}); container.appendChild(svg);
+  const g=el('g',{class:'axis'},svg); [0,25,50,75,100].forEach(p=>{const y=(H-B)-(H-B-T)*p/100; el('line',{x1:L,x2:W-R,y1:y,y2:y,class:p===0?'base':''},g); const t=el('text',{x:L-6,y:y+4,'text-anchor':'end'},g); t.textContent=p+'%';});
+  cols.forEach((c,i)=>{ const tot=c.segs.reduce((s,x)=>s+x.v,0)||1; const x=L+cw*i+(cw-bw)/2; let y=H-B; const t=el('text',{x:x+bw/2,y:H-B+16,'text-anchor':'middle'},g); t.textContent=c.label;
+    c.segs.forEach((s,j)=>{ if(!s.v) return; const h=(H-B-T)*s.v/tot; const rc=el('rect',{x,y:y-h+(j?1:0),width:bw,height:Math.max(0,h-(j?1:0)),fill:s.color,class:'bar'},svg); rc.addEventListener('pointermove',e=>showTip(e,`<b>${esc(c.label)}</b>`+c.segs.map(q=>row(q.name,q.color,fmt(q.v)+' · '+pct(q.v,tot))).join(''))); rc.addEventListener('pointerleave',hideTip); if(h>16&&j<2){const l=el('text',{x:x+bw/2,y:y-h/2+4,'text-anchor':'middle',class:'lbl',style:'fill:#fff;font-weight:600'},svg); l.textContent=pct(s.v,tot);} y-=h; }); });
+  legend(container, cols[0].segs.map(s=>[s.name,s.color]));
+}
+
+function ufChart(container, rows){
+  container.innerHTML=''; const W=1200, H=300, L=46,R=12,T=16,B=40; const n=rows.length; const cw=(W-L-R)/n; const bw=Math.min(16,cw*0.36);
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`}); container.appendChild(svg);
+  const max=niceMax(Math.max(1,...rows.flatMap(r=>[r.fem,r.sim]))); yAxis(svg,L,W-R,T,H-B,max);
+  const ys=v=>(H-B)-(H-B-T)*v/max; const g=el('g',{class:'axis'},svg);
+  rows.forEach((r,i)=>{ const x=L+cw*i+cw/2; const t=el('text',{x,y:H-B+14,'text-anchor':'middle'},g); t.textContent=r.uf; const p=el('text',{x,y:H-B+28,'text-anchor':'middle',class:'lbl'},g); p.textContent=r.sim?pct(r.neg,r.sim):'';
+    const html=`<b>${esc(r.uf)} · ${esc(uf[r.uf].nome)}</b>`+row('Feminicídios, vítima mulher (SINESP)',SERIES[0],fmt(r.fem))+row('Mulheres mortas por agressão (SIM)',SERIES[1],fmt(r.sim))+`<div class="r"><span>Mulheres negras (SIM)</span><b>${fmt(r.neg)} · ${pct(r.neg,r.sim)}</b></div>`;
+    const mk=(xx,v,c)=>{ const rc=el('rect',{x:xx,y:ys(v),width:bw,height:(H-B)-ys(v),fill:c,class:'bar',rx:3},svg); rc.addEventListener('pointermove',e=>showTip(e,html)); rc.addEventListener('pointerleave',hideTip); };
+    mk(x-bw-1,r.fem,SERIES[0]); mk(x+1,r.sim,SERIES[1]); });
+  legend(container, [['Feminicídios com vítima mulher (SINESP)',SERIES[0]],['Mulheres mortas por agressão (SIM)',SERIES[1]],['Abaixo da sigla: % de mulheres negras entre os óbitos do SIM','transparent']]);
+}
+
+let tRows=[], tCols=[], tSort={i:null,dir:-1}, tPage=0; const PS=25;
+function setTable(cols, rows){ tCols=cols; tRows=rows; tPage=0; if(tSort.i!==null&&tSort.i<cols.length) sortRows(); drawTable(); }
+function cellVal(v,c){ return c.p ? (v[1]?v[0]/v[1]:-1) : v; }
+function sortRows(){ const i=tSort.i, c=tCols[i]; tRows.sort((a,b)=>{const x=cellVal(a[i],c),y=cellVal(b[i],c); const r = typeof x==='number'? x-y : String(x).localeCompare(String(y)); return r*tSort.dir;}); }
+function drawTable(){ const th=$('#tbl thead'), tb=$('#tbl tbody'); th.innerHTML=''; tb.innerHTML=''; const tr=document.createElement('tr'); tCols.forEach((c,i)=>{const h=document.createElement('th'); h.textContent=c.l+(tSort.i===i?(tSort.dir<0?' ▼':' ▲'):''); if(c.n||c.p) h.className='num'; h.onclick=()=>{ if(tSort.i===i) tSort.dir*=-1; else {tSort.i=i;tSort.dir=(c.n||c.p)?-1:1;} sortRows(); tPage=0; drawTable(); }; tr.appendChild(h);}); th.appendChild(tr);
+  const start=tPage*PS; tRows.slice(start,start+PS).forEach(r=>{const tr=document.createElement('tr'); r.forEach((v,i)=>{const td=document.createElement('td'); const c=tCols[i]; td.textContent = c.p? pct(v[0],v[1]) : (typeof v==='number'?fmt(v):v); if(c.n||c.p) td.className='num'; tr.appendChild(td);}); tb.appendChild(tr);});
+  $('#pginfo').textContent = tRows.length? `${fmt(start+1)}–${fmt(Math.min(start+PS,tRows.length))} de ${fmt(tRows.length)} linhas` : 'Sem linhas para os filtros atuais'; }
+$('#prev').onclick=()=>{ if(tPage>0){tPage--;drawTable();} }; $('#next').onclick=()=>{ if((tPage+1)*PS<tRows.length){tPage++;drawTable();} };
+$('#tMode').onchange=()=>{ tSort={i:null,dir:-1}; renderTable(); };
+$('#csv').onclick=()=>{ const lines=[tCols.map(c=>c.l).join(';')].concat(tRows.map(r=>r.map((v,i)=>tCols[i].p?(v[1]?(100*v[0]/v[1]).toFixed(1).replace('.',','):''):v).join(';'))); const b=new Blob(['﻿'+lines.join('\n')],{type:'text/csv;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='painel_'+$('#tMode').value+'.csv'; a.click(); };
+
+let S=[], M=[];
+function render(){
+  S=fS(); M=fM();
+  const totS=sum(S,5), fem=sum(S.filter(r=>r[3]==1),5), femF=sum(S.filter(r=>r[3]==1&&r[4]==1),5);
+  const totM=sum(M,6), neg=sum(M.filter(r=>r[3]==2||r[3]==4),6), ign=sum(M.filter(r=>r[3]==9),6);
+  const anosTxt = st.anos.size===6?'2019 a 2024':[...st.anos].sort().join(', ');
+  const geoTxt = st.uf ? uf[st.uf].nome : (st.regiao || 'Brasil');
+  $('#k1').textContent=fmt(totS); $('#k1d').textContent=(st.evento?evento[st.evento].nome:'8 eventos')+' · '+geoTxt+' · '+anosTxt;
+  $('#k2').textContent=fmt(fem); $('#k2d').textContent= st.evento&&st.evento!='1' ? 'filtro de evento ativo: '+evento[st.evento].nome : `${fmt(femF)} com vítima mulher`;
+  $('#k3').textContent=fmt(totM); $('#k3d').textContent=(st.raca?( st.raca==='negra'?'negras':raca[st.raca].descricao):'todas as raças')+(st.faixa?' · '+faixa[st.faixa].descricao+' anos':'')+' · '+geoTxt;
+  $('#k4').textContent=pct(neg,totM); $('#k4d').textContent=`${fmt(neg)} de ${fmt(totM)} · ${fmt(ign)} com raça ignorada`;
+
+  const anos=[...st.anos].sort(); const keys=anos.flatMap(a=>Array.from({length:12},(_,m)=>a*100+m+1));
+  const mk=(map)=>keys.map(k=>({k,label:MESES[k%100-1]+'/'+Math.floor(k/100),short:(k%100===1?String(Math.floor(k/100)):''),v:map.get(k)||0}));
+  lineChart($('#c1'),[{name:'Feminicídios',color:SERIES[0],values:mk(groupBy(S.filter(r=>r[3]==1),r=>r[0]*100+r[1],5))}]);
+  lineChart($('#c2'),[{name:'Óbitos de mulheres',color:SERIES[1],values:mk(groupBy(M,r=>r[0]*100+r[1],6))}]);
+
+  const evRows=D.evento.filter(e=>!st.evento||e.id_evento==st.evento).map(e=>({label:e.nome,segs:D.sexo.filter(s=>!st.sexo||s.id_sexo==st.sexo).map(s=>({name:s.descricao,color:COR_SEXO[s.id_sexo],v:sum(S.filter(r=>r[3]==e.id_evento&&r[4]==s.id_sexo),5)}))}));
+  hBars($('#c3'),evRows,{L:200});
+
+  const racas=ORD_RACA.filter(racaOk);
+  stack100($('#c4'),anos.map(a=>({label:String(a),segs:racas.map(id=>({name:raca[id].descricao,color:COR_RACA[id],v:sum(M.filter(r=>r[0]===a&&r[3]==id),6)}))})));
+
+  const fx=D.faixa.filter(f=>!st.faixa||f.id_faixa==st.faixa);
+  hBars($('#c5'),fx.map(f=>({label:f.descricao+(f.id_faixa==9?'':' anos'),segs:[{name:'Óbitos',color:f.id_faixa==9?'var(--muted)':SEQ[Math.min(6,Math.floor((f.id_faixa-1)*6/7))+0],v:sum(M.filter(r=>r[4]==f.id_faixa),6)}]})),{L:90});
+
+  const meios=D.meio.map(m=>({label:m.descricao,segs:[{name:'Óbitos',color:SERIES[1],v:sum(M.filter(r=>r[5]==m.id_meio),6)}]})).sort((a,b)=>b.segs[0].v-a.segs[0].v);
+  hBars($('#c6'),meios,{L:200});
+
+  const ufs=D.uf.filter(u=>geoOk(u.sigla)).map(u=>({uf:u.sigla,fem:sum(S.filter(r=>r[2]===u.sigla&&r[3]==1&&r[4]==1),5),sim:sum(M.filter(r=>r[2]===u.sigla),6),neg:sum(M.filter(r=>r[2]===u.sigla&&(r[3]==2||r[3]==4)),6)})).sort((a,b)=>b.sim-a.sim);
+  ufChart($('#c7'),ufs);
+  renderTable();
+}
+function renderTable(){
+  const mode=$('#tMode').value;
+  if(mode==='uf'){
+    const rows=[]; for(const u of D.uf.filter(u=>geoOk(u.sigla))) for(const a of [...st.anos].sort()){ const s=S.filter(r=>r[2]===u.sigla&&r[0]===a), m=M.filter(r=>r[2]===u.sigla&&r[0]===a); const sim=sum(m,6), neg=sum(m.filter(r=>r[3]==2||r[3]==4),6); rows.push([a,u.sigla,u.regiao,sum(s.filter(r=>r[3]==1),5),sum(s.filter(r=>r[3]==1&&r[4]==1),5),sum(s.filter(r=>r[4]==1&&r[3]<=4),5),sim,neg,[neg,sim]]); }
+    setTable([{l:'Ano',n:1},{l:'UF'},{l:'Região'},{l:'Feminicídios (SINESP)',n:1},{l:'Feminicídios, vítima mulher',n:1},{l:'Vítimas letais mulheres (SINESP)',n:1},{l:'Óbitos mulheres agressão (SIM)',n:1},{l:'Mulheres negras (SIM)',n:1},{l:'% negras',p:1}],rows);
+  } else if(mode==='mun'){
+    const agg=new Map(); for(const [a,sig,nome,q] of D.top_mun){ if(!st.anos.has(a)||!geoOk(sig)) continue; const k=sig+'|'+nome; agg.set(k,(agg.get(k)||0)+q); }
+    const rows=[...agg].map(([k,v])=>{const [sig,nome]=k.split('|');return [nome,sig,uf[sig].regiao,v];}).sort((a,b)=>b[3]-a[3]);
+    setTable([{l:'Município'},{l:'UF'},{l:'Região'},{l:'Feminicídios, vítima mulher (SINESP)',n:1}],rows);
+  } else {
+    const rows=[]; for(const r of D.raca){ if(!racaOk(r.id_raca_cor)) continue; const tot=sum(M.filter(x=>x[3]==r.id_raca_cor),6); for(const m of D.meio){ const v=sum(M.filter(x=>x[3]==r.id_raca_cor&&x[5]==m.id_meio),6); rows.push([r.descricao,m.descricao,v,[v,tot]]); } }
+    setTable([{l:'Raça/cor'},{l:'Meio de agressão'},{l:'Óbitos',n:1},{l:'% dentro da raça/cor',p:1}],rows);
+  }
+}
+if(matchMedia('(prefers-color-scheme:dark)').matches) $('#theme').textContent='Tema claro';
+render();
+</script>
+</body>
+</html>

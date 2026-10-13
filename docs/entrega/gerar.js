@@ -58,7 +58,7 @@ C.push({ meta: [
   ["Disciplina", "Big Data e Analytics"],
   ["Tema", "Monitoramento de Segurança Pública e Feminicídio Interseccional (ODS 5 e ODS 18)"],
   ["Fontes", "SINESP-VDE (MJSP), SIM (DataSUS/OpenDataSUS) e IBGE Localidades"],
-  ["Aluno", "Gustavo Souza Santos"],
+  ["Alunos", "Gustavo Souza Santos e Mateus Bulhões"],
   ["Repositório", REPO || "(link a inserir)"],
   ["Banco", `Aiven for PostgreSQL (plano Free), ${db.versao.split(" on ")[0]}, schema vde`],
 ] });
