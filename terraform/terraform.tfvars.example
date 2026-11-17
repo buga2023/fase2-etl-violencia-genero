@@ -1,0 +1,4 @@
+# Copie para terraform.tfvars (fica fora do git).
+# O token NÃO vai aqui: ele é lido do .env da raiz pelo scripts/tf.sh (TF_VAR_aiven_api_token).
+aiven_project   = "seu-projeto-aiven"
+pg_service_name = "pg-feminicidio"

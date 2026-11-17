@@ -16,3 +16,12 @@ node_modules/
 # pasta de envio gerada localmente
 Entrega_Fase2_*/
 Entrega_Fase2_*.zip
+
+# terraform: state e variáveis locais têm segredo
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/terraform.tfvars
+terraform/crash.log
+# segredos do streamlit
+.streamlit/secrets.toml

@@ -1,8 +1,8 @@
 # Verificação do banco (sql/03_verificacao.sql)
 
-Executado em 10/10/2026 23:37.
+Executado em 17/11/2026 08:47.
 
-Servidor: `PostgreSQL 18.6 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.3.1 20260722 (Red Hat 15.3.1-1), 64-bit`
+Servidor: `PostgreSQL 18.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.3.1 20260722 (Red Hat 15.3.1-1), 64-bit`
 
 ## 1. Registros por tabela
 
@@ -18,7 +18,8 @@ Servidor: `PostgreSQL 18.6 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.3.1 
 | dim_meio_agressao | 6 |
 | fato_vitimas_sinesp | 233988 |
 | fato_obitos_agressao_sim | 22005 |
-| meta_carga | 13 |
+| populacao_feminina_uf | 162 |
+| meta_carga | 14 |
 
 ## 2. Espaço ocupado pelo schema vde
 
@@ -83,6 +84,9 @@ Servidor: `PostgreSQL 18.6 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.3.1 
 | meta_carga | arquivo_origem | character varying(200) | YES |
 | meta_carga | sha256_origem | character(64) | YES |
 | meta_carga | executado_em | timestamp with time zone | NO |
+| populacao_feminina_uf | cod_uf | smallint | NO |
+| populacao_feminina_uf | ano | smallint | NO |
+| populacao_feminina_uf | populacao | integer | NO |
 
 ## 4. Relacionamentos (chaves estrangeiras)
 
@@ -99,24 +103,26 @@ Servidor: `PostgreSQL 18.6 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.3.1 
 | fato_vitimas_sinesp | id_municipio | dim_municipio | id_municipio |
 | fato_vitimas_sinesp | id_sexo | dim_sexo | id_sexo |
 | fato_vitimas_sinesp | id_tempo | dim_tempo | id_tempo |
+| populacao_feminina_uf | cod_uf | dim_uf | cod_uf |
 
 ## 5. Linhagem (meta_carga)
 
 | fonte | arquivo | sha256 | arquivo_origem | sha256_origem | linhas_lidas | linhas_apos_filtro | executado_em |
 |---|---|---|---|---|---|---|---|
-| SINESP-VDE | BancoVDE 2019.xlsx | 01d5cefb6459 |  |  | 764700 | 406116 | 2026-10-11 02:37:26.551589+00:00 |
-| SINESP-VDE | BancoVDE 2020.xlsx | 7648a93a473d |  |  | 764700 | 406116 | 2026-10-11 02:37:26.551589+00:00 |
-| SINESP-VDE | BancoVDE 2021.xlsx | babdbbbc71c4 |  |  | 764732 | 406136 | 2026-10-11 02:37:26.551589+00:00 |
-| SINESP-VDE | BancoVDE 2022.xlsx | f5561304e956 |  |  | 764652 | 406086 | 2026-10-11 02:37:26.551589+00:00 |
-| SINESP-VDE | BancoVDE 2023.xlsx | 33baf9e4d2ad |  |  | 764772 | 406161 | 2026-10-11 02:37:26.551589+00:00 |
-| SINESP-VDE | BancoVDE 2024.xlsx | 87deaea4473c |  |  | 764820 | 406191 | 2026-10-11 02:37:26.551589+00:00 |
-| SIM | Mortalidade_Geral_2019.csv | 05acd2eea502 |  |  | 1349801 | 3728 | 2026-10-11 02:37:26.551589+00:00 |
-| SIM | Mortalidade_Geral_2020.csv | 2fdd9fcc8924 |  |  | 1556824 | 3822 | 2026-10-11 02:37:26.551589+00:00 |
-| SIM | Mortalidade_Geral_2021.csv | 79cfbfff330f | Mortalidade_Geral_2021_csv.zip | 6a8fe8077cf1 | 1832649 | 3844 | 2026-10-11 02:37:26.551589+00:00 |
-| SIM | Mortalidade_Geral_2022.csv | e0c5c0bc97d1 | Mortalidade_Geral_2022_csv.zip | 10b37a98b9c2 | 1544266 | 3788 | 2026-10-11 02:37:26.551589+00:00 |
-| SIM | Mortalidade_Geral_2023.csv | 28db720ab8fd | Mortalidade_Geral_2023_csv.zip | 9a14ef4355b7 | 1465610 | 3887 | 2026-10-11 02:37:26.551589+00:00 |
-| SIM | Mortalidade_Geral_2024.csv | be397f348a6a | DO24OPEN_csv.zip | 13db250c9090 | 1532015 | 3622 | 2026-10-11 02:37:26.551589+00:00 |
-| IBGE | municipios.json | 77bf68d9f5b1 |  |  | 5571 | 5571 | 2026-10-11 02:37:26.551589+00:00 |
+| SINESP-VDE | BancoVDE 2019.xlsx | 01d5cefb6459 |  |  | 764700 | 406116 | 2026-11-17 11:47:06.078344+00:00 |
+| SINESP-VDE | BancoVDE 2020.xlsx | 7648a93a473d |  |  | 764700 | 406116 | 2026-11-17 11:47:06.078344+00:00 |
+| SINESP-VDE | BancoVDE 2021.xlsx | babdbbbc71c4 |  |  | 764732 | 406136 | 2026-11-17 11:47:06.078344+00:00 |
+| SINESP-VDE | BancoVDE 2022.xlsx | f5561304e956 |  |  | 764652 | 406086 | 2026-11-17 11:47:06.078344+00:00 |
+| SINESP-VDE | BancoVDE 2023.xlsx | 33baf9e4d2ad |  |  | 764772 | 406161 | 2026-11-17 11:47:06.078344+00:00 |
+| SINESP-VDE | BancoVDE 2024.xlsx | 87deaea4473c |  |  | 764820 | 406191 | 2026-11-17 11:47:06.078344+00:00 |
+| SIM | Mortalidade_Geral_2019.csv | 05acd2eea502 |  |  | 1349801 | 3728 | 2026-11-17 11:47:06.078344+00:00 |
+| SIM | Mortalidade_Geral_2020.csv | 2fdd9fcc8924 |  |  | 1556824 | 3822 | 2026-11-17 11:47:06.078344+00:00 |
+| SIM | Mortalidade_Geral_2021.csv | 79cfbfff330f | Mortalidade_Geral_2021_csv.zip | 6a8fe8077cf1 | 1832649 | 3844 | 2026-11-17 11:47:06.078344+00:00 |
+| SIM | Mortalidade_Geral_2022.csv | e0c5c0bc97d1 | Mortalidade_Geral_2022_csv.zip | 10b37a98b9c2 | 1544266 | 3788 | 2026-11-17 11:47:06.078344+00:00 |
+| SIM | Mortalidade_Geral_2023.csv | 28db720ab8fd | Mortalidade_Geral_2023_csv.zip | 9a14ef4355b7 | 1465610 | 3887 | 2026-11-17 11:47:06.078344+00:00 |
+| SIM | Mortalidade_Geral_2024.csv | be397f348a6a | DO24OPEN_csv.zip | 13db250c9090 | 1532015 | 3622 | 2026-11-17 11:47:06.078344+00:00 |
+| IBGE | municipios.json | 77bf68d9f5b1 |  |  | 5571 | 5571 | 2026-11-17 11:47:06.078344+00:00 |
+| IBGE | projecoes_2024_tab2_grupo_quinquenal.xlsx | 57f997f1ee00 |  |  | 1881 | 162 | 2026-11-17 11:47:06.078344+00:00 |
 
 ## 6. Amostra de vw_comparativo_uf_ano
 

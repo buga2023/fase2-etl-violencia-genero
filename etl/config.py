@@ -12,6 +12,11 @@ ANO_INICIO, ANO_FIM = 2019, 2024          # Fase 1: recorte temporal
 CHUNK_SIZE = 200_000                       # leitura do SIM em blocos
 
 # ---------------------------------------------------------------- fontes
+# Projeção da População, revisão 2024 (população por sexo, grupo de idade, UF e ano).
+# Denominador das taxas por 100 mil mulheres, o mesmo usado pelo FBSP e pelo Atlas da Violência.
+URL_IBGE_PROJECAO = ("https://ftp.ibge.gov.br/Projecao_da_Populacao/Projecao_da_Populacao_2024/"
+                     "projecoes_2024_tab2_grupo_quinquenal.xlsx")
+ARQ_IBGE_PROJECAO = "projecoes_2024_tab2_grupo_quinquenal.xlsx"
 URL_IBGE_MUNICIPIOS = "https://servicodados.ibge.gov.br/api/v1/localidades/municipios?view=nivelado"
 # OpenDataSUS — Declarações de Óbito (CSV nacional por ano, separador ';'). ano: (URL, arquivo oficial)
 # Recursos listados em https://dadosabertos.saude.gov.br/dataset/sim (links conferidos em out/2026).

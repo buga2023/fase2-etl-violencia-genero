@@ -9,7 +9,8 @@ import psycopg
 from . import config as cfg
 
 ORDEM = ["dim_uf", "dim_tempo", "dim_municipio", "dim_sexo", "dim_raca_cor", "dim_faixa_etaria",
-         "dim_evento", "dim_meio_agressao", "fato_vitimas_sinesp", "fato_obitos_agressao_sim"]
+         "dim_evento", "dim_meio_agressao", "fato_vitimas_sinesp", "fato_obitos_agressao_sim",
+         "populacao_feminina_uf"]
 
 
 def _copy(cur, tabela: str, df: pd.DataFrame) -> None:

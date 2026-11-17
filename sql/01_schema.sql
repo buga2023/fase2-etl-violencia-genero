@@ -14,7 +14,8 @@ SET search_path TO vde;
 -- Ordem de DROP respeita as FKs (fatos antes das dimensões)
 DROP VIEW  IF EXISTS vw_comparativo_uf_ano, vw_obitos_mulheres_raca_uf_ano,
                      vw_vitimas_genero_uf_ano CASCADE;
-DROP TABLE IF EXISTS fato_vitimas_sinesp, fato_obitos_agressao_sim, meta_carga,
+DROP VIEW  IF EXISTS vw_taxas_uf_ano CASCADE;
+DROP TABLE IF EXISTS fato_vitimas_sinesp, fato_obitos_agressao_sim, meta_carga, populacao_feminina_uf,
                      dim_tempo, dim_municipio, dim_uf, dim_sexo, dim_raca_cor,
                      dim_faixa_etaria, dim_evento, dim_meio_agressao CASCADE;
 
@@ -121,6 +122,15 @@ CREATE INDEX ix_mun_uf           ON dim_municipio (cod_uf);
 -- ---------------------------------------------------------------------
 -- LINHAGEM: cada arquivo de origem carregado, com hash da versão original
 -- ---------------------------------------------------------------------
+-- População feminina por UF e ano (IBGE, Projeção da População revisão 2024).
+-- É o denominador das taxas por 100 mil mulheres. Grão anual porque a projeção é anual.
+CREATE TABLE populacao_feminina_uf (
+    cod_uf      SMALLINT NOT NULL REFERENCES dim_uf (cod_uf),
+    ano         SMALLINT NOT NULL CHECK (ano BETWEEN 2000 AND 2100),
+    populacao   INTEGER  NOT NULL CHECK (populacao > 0),
+    PRIMARY KEY (cod_uf, ano)
+);
+
 CREATE TABLE meta_carga (
     id_carga            SERIAL       PRIMARY KEY,
     fonte               VARCHAR(20)  NOT NULL,                 -- SINESP-VDE / SIM / IBGE
