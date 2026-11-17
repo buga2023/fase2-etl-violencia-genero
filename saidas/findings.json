@@ -1,0 +1,135 @@
+{
+  "tendencia_anual": {
+    "feminicidios_sinesp": {
+      "inclinacao_por_ano": 38.2,
+      "variacao_pct_2019_2024": 12.8,
+      "r2": 0.936,
+      "p_valor": 0.0016
+    },
+    "vitimas_letais_mulheres_sinesp": {
+      "inclinacao_por_ano": -34.3,
+      "variacao_pct_2019_2024": -4.8,
+      "r2": 0.493,
+      "p_valor": 0.1199
+    },
+    "obitos_agressao_mulheres_sim": {
+      "inclinacao_por_ano": -11.2,
+      "variacao_pct_2019_2024": -2.8,
+      "r2": 0.049,
+      "p_valor": 0.675
+    }
+  },
+  "serie_anual": [
+    {
+      "ano": 2019,
+      "feminicidios_sinesp": 1331,
+      "vitimas_letais_mulheres_sinesp": 4176,
+      "obitos_agressao_mulheres_sim": 3728,
+      "razao_sim_sobre_feminicidio": 2.8
+    },
+    {
+      "ano": 2020,
+      "feminicidios_sinesp": 1346,
+      "vitimas_letais_mulheres_sinesp": 4202,
+      "obitos_agressao_mulheres_sim": 3822,
+      "razao_sim_sobre_feminicidio": 2.84
+    },
+    {
+      "ano": 2021,
+      "feminicidios_sinesp": 1366,
+      "vitimas_letais_mulheres_sinesp": 4234,
+      "obitos_agressao_mulheres_sim": 3844,
+      "razao_sim_sobre_feminicidio": 2.81
+    },
+    {
+      "ano": 2022,
+      "feminicidios_sinesp": 1456,
+      "vitimas_letais_mulheres_sinesp": 4130,
+      "obitos_agressao_mulheres_sim": 3788,
+      "razao_sim_sobre_feminicidio": 2.6
+    },
+    {
+      "ano": 2023,
+      "feminicidios_sinesp": 1478,
+      "vitimas_letais_mulheres_sinesp": 4171,
+      "obitos_agressao_mulheres_sim": 3887,
+      "razao_sim_sobre_feminicidio": 2.63
+    },
+    {
+      "ano": 2024,
+      "feminicidios_sinesp": 1501,
+      "vitimas_letais_mulheres_sinesp": 3975,
+      "obitos_agressao_mulheres_sim": 3622,
+      "razao_sim_sobre_feminicidio": 2.41
+    }
+  ],
+  "pct_negras_ano": {
+    "2019": 66.0,
+    "2020": 67.4,
+    "2021": 67.4,
+    "2022": 66.3,
+    "2023": 68.1,
+    "2024": 67.5
+  },
+  "pct_negras_uf_top": {
+    "AL": 97.3,
+    "AP": 96.7,
+    "SE": 90.7,
+    "CE": 90.4,
+    "BA": 88.2
+  },
+  "pct_negras_uf_bottom": {
+    "RR": 45.5,
+    "SP": 39.3,
+    "PR": 31.8,
+    "RS": 21.5,
+    "SC": 20.5
+  },
+  "meio_agressao_pct": {
+    "Arma de fogo": 49.1,
+    "Objeto cortante/penetrante": 26.5,
+    "Outros meios / não especificado": 8.5,
+    "Objeto contundente": 6.5,
+    "Enforcamento/estrangulamento": 6.2,
+    "Força corporal/agressão sexual": 3.1
+  },
+  "faixa_etaria_pct": {
+    "0-11": 3.2,
+    "12-17": 6.5,
+    "18-24": 18.6,
+    "25-29": 13.6,
+    "30-39": 24.5,
+    "40-49": 16.7,
+    "50-59": 8.4,
+    "60+": 7.8,
+    "Ignorada": 0.7
+  },
+  "faixa_modal": "30-39",
+  "mes_pico_feminicidio": "Dez",
+  "mes_vale_feminicidio": "Jun",
+  "top5_uf_feminicidio_total": {
+    "SP": 1180,
+    "MG": 985,
+    "BA": 639,
+    "RJ": 565,
+    "RS": 542
+  },
+  "correlacao_uf_2024_sinesp_sim": {
+    "pearson_r": 0.819,
+    "p_valor": 0.0,
+    "n_uf": 27
+  },
+  "pct_feminicidio_sobre_obitos_nacional": {
+    "2019": 35.7,
+    "2020": 35.2,
+    "2021": 35.5,
+    "2022": 38.4,
+    "2023": 38.0,
+    "2024": 41.4
+  },
+  "qui2_raca_por_regiao": {
+    "chi2": 4522.6,
+    "p_valor": 0.0,
+    "dof": 4
+  }
+}

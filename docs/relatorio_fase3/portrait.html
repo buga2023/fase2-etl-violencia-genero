@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<style>@page{size:A4 portrait;margin:0;}
+/*__BASE__*/
+.noise{display:none}</style></head>
+<body data-palette="sul">
+
+<!-- ===================== P1 · CAPA ===================== -->
+<section class="page portrait cover">
+  <div class="noise"></div>
+  <div class="top">
+    Projeto Integrador · Dados e Segurança Pública<br>
+    Fase 3 · Análise, Taxas e Inteligência &nbsp;·&nbsp; Relatório Analítico<br>
+    Feminicídio interseccional, por gênero, raça e idade
+  </div>
+  <div class="sticker">da base à evidência</div>
+  <div class="hero">
+    <h1>O que os<br>dados dizem<span class="dot">.</span></h1>
+    <div class="tag">O banco que a Fase 2 montou agora responde. Lemos o feminicídio por
+    gênero, raça e idade com estatística, e colocamos nossos números lado a lado com quem
+    publica esse assunto no país.</div>
+    <div class="metablock">
+      <div class="lbl">Equipe</div>
+      <div class="names">Gustavo Souza Santos &nbsp;·&nbsp; Mateus Bulhões</div>
+    </div>
+    <div class="foot">Outubro de 2026 &nbsp;|&nbsp; SINESP-VDE · SIM/DataSUS · IBGE · Python · PostgreSQL no Aiven</div>
+  </div>
+</section>
+
+<!-- ===================== P2 · EM UMA PÁGINA ===================== -->
+<section class="page portrait">
+  <div class="noise"></div>
+  <div class="sec-tag">Em uma página</div>
+  <h2 class="title-xl">O que a análise respondeu</h2>
+  <div class="kicker">Para quem só tem cinco minutos</div>
+  <p class="lead">A Fase 2 entregou o banco pronto. Nesta fase a gente foi fazer perguntas a
+  ele. Ao longo de seis anos, de 2019 a 2024, e com duas fontes que aprendemos a juntar, o
+  registro policial da SINESP e a declaração de óbito do SIM, levantamos cinco perguntas de
+  pesquisa e respondemos cada uma com estatística, não com palpite. A resposta derruba a
+  leitura mais fácil: <span class="brand">o país não está matando mais mulheres, está
+  finalmente dando nome ao que já acontecia</span>, e o peso continua caindo sobre as mesmas
+  mulheres de sempre.</p>
+
+  <div class="statstrip">
+    <div class="stat"><div class="num">+13<small>%</small></div><div class="cap">feminicídios registrados a mais</div><div class="src">SINESP · de 2019 a 2024 · p=0,002</div></div>
+    <div class="stat"><div class="num">67<small>%</small></div><div class="cap">das vítimas eram mulheres negras</div><div class="src">SIM · de 2019 a 2024</div></div>
+    <div class="stat"><div class="num">49<small>%</small></div><div class="cap">foram mortas por arma de fogo</div><div class="src">SIM · meio da agressão</div></div>
+    <div class="stat"><div class="num">0,82<small>r</small></div><div class="cap">de concordância entre as fontes</div><div class="src">correlação · 27 estados · 2024</div></div>
+  </div>
+
+  <div class="quad">
+    <div class="qcard q1"><div class="qt">Achado 01 · Tipificação</div><h3>Sobe o registro, não a morte</h3><p>Os feminicídios registrados crescem 12,8%, mas o total de mortes violentas de mulheres não. São mais casos recebendo o nome certo.</p></div>
+    <div class="qcard q2"><div class="qt">Achado 02 · Interseccional</div><h3>A cor tem endereço</h3><p>São 67% de vítimas negras no país, variando de 21% em Santa Catarina a 97% em Alagoas. Raça e território andam juntos.</p></div>
+    <div class="qcard q3"><div class="qt">Achado 03 · Perfil</div><h3>Arma de fogo, de 30 a 39 anos</h3><p>Metade morre por arma de fogo, a maioria entre 30 e 39 anos, e o pico do ano é em dezembro.</p></div>
+    <div class="qcard q4"><div class="qt">Achado 04 · Validação</div><h3>As fontes concordam</h3><p>Segurança e Saúde contam a mesma história no mapa, com correlação de 0,82. São Paulo e Bahia são os contrastes.</p></div>
+  </div>
+  <div class="pagenum corner">Fase 3 · 02</div>
+</section>
+
+<!-- ===================== P3 · MÉTODO ===================== -->
+<section class="page portrait">
+  <div class="noise"></div>
+  <div class="sec-tag">Parte 1 · Método</div>
+  <h2 class="title-xl">Cinco perguntas, um banco</h2>
+  <div class="kicker">Como a análise foi feita e por que dá para confiar nela</div>
+  <p class="lead">A gente não baixou nada de novo. Toda a análise sai do banco em modelo
+  estrela que a Fase 2 carregou no PostgreSQL, lido aqui pelos CSVs já tratados que ficam em
+  <span class="brand">data/processed</span>, em Python com pandas. Cada número desta edição é
+  uma soma das tabelas de fato. Nada foi estimado, imputado ou preenchido no escuro. Os
+  testes usam scipy, com corte de significância em 5%. E os scripts da pasta
+  <span class="brand">analise</span> reproduzem, na mesma ordem, cada tabela e cada figura
+  que você vê aqui.</p>
+
+  <div class="two">
+    <div>
+      <div class="blkh">Perguntas de pesquisa</div>
+      <div class="item"><span class="id">P-01</span><span>O registro de feminicídio está crescendo? É mais violência ou é melhor classificação?</span></div>
+      <div class="item"><span class="id">P-02</span><span>Quem é a vítima? Qual a presença de mulheres negras e como ela muda pelo território?</span></div>
+      <div class="item"><span class="id">P-03</span><span>Como e em que idade as mulheres são mortas?</span></div>
+      <div class="item"><span class="id">P-04</span><span>Existe um padrão no tempo, meses de mais risco?</span></div>
+      <div class="item"><span class="id">P-05</span><span>O registro policial e a declaração de óbito contam a mesma história?</span></div>
+    </div>
+    <div>
+      <div class="blkh alt">Decisões de análise</div>
+      <div class="item"><span class="id alt">A-01</span><span>Feminicídio é o evento assim classificado na SINESP, com todas as vítimas. Óbito por agressão é o do SIM, CID X85 a Y09, sexo feminino.</span></div>
+      <div class="item"><span class="id alt">A-02</span><span>Negra quer dizer preta mais parda, o critério do IBGE e do FBSP. A raça ignorada fica no total, então o percentual é conservador.</span></div>
+      <div class="item"><span class="id alt">A-03</span><span>Tendência por regressão linear, diferença racial por qui-quadrado e concordância por correlação de Pearson.</span></div>
+      <div class="item"><span class="id alt">A-04</span><span>Toda saída é uma soma dos CSVs tratados. Os scripts e o arquivo findings.json vão junto no repositório.</span></div>
+    </div>
+  </div>
+  <div class="callout"><b>Por que duas fontes?</b> A SINESP sabe o tipo de crime, mas não
+  registra a raça. O SIM sabe a raça, a idade e o meio da agressão, mas não diz se foi
+  feminicídio. Só juntando as duas dá para responder à pergunta interseccional. O que as une
+  são três dimensões que ambas têm: tempo, município e sexo.</div>
+  <div class="pagenum corner">Fase 3 · 03</div>
+</section>
+
+<!-- ===================== P4 · ACHADO 1a ===================== -->
+<section class="page portrait">
+  <div class="noise"></div>
+  <div class="sec-tag">Parte 2 · Achado 1</div>
+  <h2 class="title-xl">A tipificação amadurece</h2>
+  <div class="kicker">O registro de feminicídio sobe, o total de mortes não</div>
+  <p class="lead">Olhado sozinho, o número de feminicídios assusta. Foi de 1.331 para 1.501 em
+  seis anos, uma alta de 12,8% que o teste confirma não ser acaso, com R² de 0,94 e p de
+  0,002. Só que existem três leituras do mesmo fenômeno, e elas não combinam. O total de
+  vítimas letais de mulheres na SINESP e os óbitos de mulheres por agressão no SIM
+  <span class="brand">não cresceram</span>. Ficaram parados, com leve queda em 2024.</p>
+  <div class="figbox">
+    <img src="fig1_serie_anual.png" alt="Série anual das três leituras">
+    <div class="figcap">As três leituras da violência letal contra a mulher no Brasil, de
+    2019 a 2024. Enquanto o registro específico de feminicídio sobe, o universo de mortes
+    violentas de mulheres fica no mesmo lugar.</div>
+    <div class="figsrc">Fonte SINESP-VDE e SIM, dados tratados na Fase 2. Tabela 01_serie_anual</div>
+  </div>
+  <div class="callout">Se houvesse mais mortes, as três linhas subiriam juntas. Como só a
+  linha do feminicídio sobe, a leitura que fecha é a de <b>melhor classificação</b>. Mortes
+  que antes viravam homicídio genérico passaram a ser nomeadas como feminicídio.</div>
+  <div class="pagenum corner">Fase 3 · 04</div>
+</section>
+
+<!-- ===================== P5 · ACHADO 1b ===================== -->
+<section class="page portrait">
+  <div class="noise"></div>
+  <div class="sec-tag">Parte 2 · Achado 1, continuação</div>
+  <h2 class="title-xl">Captando mais, não matando mais</h2>
+  <div class="kicker">A prova de que o crescimento é de registro</div>
+  <p class="lead">Se o feminicídio é um recorte dentro das mortes violentas de mulheres, então
+  a fatia que ele ocupa nesse conjunto mostra o quanto a segurança pública está de fato
+  <span class="brand">captando</span> esses casos. Essa fatia subiu de 35,7% em 2019 para
+  41,4% em 2024. Seis pontos em seis anos.</p>
+  <div class="figbox">
+    <img src="fig2_captacao.png" alt="Captação da tipificação de feminicídio">
+    <div class="figcap">Os feminicídios da SINESP como fatia dos óbitos de mulheres por
+    agressão do SIM. A alta constante separa o efeito de classificação do efeito de volume.</div>
+    <div class="figsrc">Fonte SINESP-VDE e SIM, dados tratados na Fase 2</div>
+  </div>
+  <p class="lead" style="font-size:10pt">Essa leitura conversa com o que os órgãos oficiais
+  vêm dizendo. O Anuário do FBSP e o Atlas da Violência apontam, desde a Lei do Feminicídio
+  de 2015, um amadurecimento aos poucos da classificação. Nossa base, a partir das mesmas
+  fontes, chega ao mesmo diagnóstico, com a vantagem de mostrar isso ano a ano e no detalhe
+  de cada estado.</p>
+  <div class="pagenum corner">Fase 3 · 05</div>
+</section>
+
+<!-- ===================== P6 · ACHADO 2a ===================== -->
+<section class="page portrait">
+  <div class="noise"></div>
+  <div class="sec-tag">Parte 3 · Achado 2</div>
+  <h2 class="title-xl">A cor tem endereço</h2>
+  <div class="kicker">São 67% de vítimas negras, mas isso vai de 21% a 97% entre os estados</div>
+  <p class="lead" style="font-size:10pt;margin-bottom:6px">No Brasil, duas em cada três mulheres
+  mortas por agressão são negras, pretas ou pardas, e esse número está parado desde 2019. Mas
+  a média nacional esconde um país partido. A cor da vítima muda de forma brutal conforme o
+  estado, acompanhando a composição racial de cada região.</p>
+  <div class="figbox">
+    <img src="fig3_negras_uf.png" alt="Percentual de mulheres negras por estado">
+    <div class="figsrc">Fonte SIM, dados tratados na Fase 2. Tabela 02_pct_negras_por_uf</div>
+  </div>
+  <div class="pagenum corner">Fase 3 · 06</div>
+</section>
+
+<!-- ===================== P7 · ACHADO 2b ===================== -->
+<section class="page portrait">
+  <div class="noise"></div>
+  <div class="sec-tag">Parte 3 · Achado 2, continuação</div>
+  <h2 class="title-xl">Raça e idade, lado a lado</h2>
+  <div class="kicker">O cruzamento que uma fonte sozinha não enxerga</div>
+  <p class="lead">É aqui que a base conformada mostra a que veio: cruzar raça e idade na mesma
+  tabela. A presença de mulheres negras se mantém em quase todas as faixas de idade. Ela é
+  maioria entre as vítimas dos 12 aos 60 anos, o que afasta a ideia de que a desigualdade
+  racial seria só um efeito da idade.</p>
+  <div class="figbox">
+    <img src="fig7_heatmap.png" alt="Raça por faixa etária">
+    <div class="figcap">Como se distribuem por raça e cor as vítimas de cada faixa de idade.
+    A leitura é por linha: em cada idade, qual a composição das mulheres mortas.</div>
+    <div class="figsrc">Fonte SIM, dados tratados na Fase 2. Tabela 03_interseccional_raca_faixa</div>
+  </div>
+  <div class="callout">O teste qui-quadrado confirma: a distribuição racial dos óbitos
+  <b>é diferente entre as regiões</b> muito além do que o acaso explicaria, com χ² de 4.522 e
+  p abaixo de 0,001. Nesta base, raça e território não são variáveis separadas. São o mesmo
+  eixo.</div>
+  <div class="pagenum corner">Fase 3 · 07</div>
+</section>
+
+<!-- ===================== P8 · ACHADO 3a ===================== -->
+<section class="page portrait">
+  <div class="noise"></div>
+  <div class="sec-tag">Parte 4 · Achado 3</div>
+  <h2 class="title-xl">Como elas são mortas</h2>
+  <div class="kicker">O meio da agressão e por que ele importa para a política pública</div>
+  <p class="lead">Metade dos óbitos de mulheres por agressão no período foi por arma de fogo,
+  49,1%, seguida de objeto cortante ou perfurante, 26,5%. Juntos, esses dois meios respondem
+  por três de cada quatro mortes. É um dado que aponta direto para onde a prevenção pode
+  agir.</p>
+  <div class="figbox">
+    <img src="fig4_meio.png" alt="Meio de agressão">
+    <div class="figcap">Como se dividem os óbitos de mulheres pelo meio da agressão, segundo a
+    CID-10, de 2019 a 2024.</div>
+    <div class="figsrc">Fonte SIM, dados tratados na Fase 2. Tabela 04_meio_agressao</div>
+  </div>
+  <div class="callout"><b>Arma de fogo e controle.</b> Quando metade das mortes passa por um
+  instrumento que a política pública consegue regular, o meio deixa de ser detalhe de laudo e
+  vira alavanca de prevenção.</div>
+  <div class="pagenum corner">Fase 3 · 08</div>
+</section>
+
+<!-- ===================== P9 · ACHADO 3b ===================== -->
+<section class="page portrait">
+  <div class="noise"></div>
+  <div class="sec-tag">Parte 4 · Achado 3, continuação</div>
+  <h2 class="title-xl">Em que idade, em que mês</h2>
+  <div class="kicker">Onde concentrar proteção no tempo e na vida</div>
+  <div class="figbox">
+    <img src="fig5_faixa.png" alt="Faixa etária">
+    <div class="figcap">A idade das mulheres mortas por agressão. A faixa de 30 a 39 anos é a
+    mais atingida, com 24,5%. Somada à de 18 a 29, chega a 57% das mortes.</div>
+    <div class="figsrc">Fonte SIM, dados tratados na Fase 2. Tabela 06_faixa_etaria</div>
+  </div>
+  <div class="figbox">
+    <img src="fig6_sazonalidade.png" alt="Sazonalidade">
+    <div class="figcap">O total somado de 2019 a 2024, mês a mês. As duas fontes desenham a
+    mesma curva: pico em dezembro e ponto mais baixo em junho.</div>
+    <div class="figsrc">Fonte SINESP-VDE e SIM, dados tratados na Fase 2. Tabela 07_sazonalidade</div>
+  </div>
+  <div class="pagenum corner">Fase 3 · 09</div>
+</section>
+
+<!-- ===================== P10 · ACHADO 4 ===================== -->
+<section class="page portrait">
+  <div class="noise"></div>
+  <div class="sec-tag">Parte 5 · Achado 4</div>
+  <h2 class="title-xl">As duas fontes concordam</h2>
+  <div class="kicker">A validação cruzada entre Segurança e Saúde</div>
+  <p class="lead">Um medo justo em qualquer análise que junta fontes é que elas se
+  contradigam. Aqui acontece o contrário. Onde o SIM registra mais óbitos de mulheres por
+  agressão, a SINESP registra mais feminicídios. A correlação entre as duas, por estado em
+  2024, é forte, de 0,82, e bem significativa. Uma base valida a outra.</p>
+  <div class="figbox">
+    <img src="fig8_divergencia.png" alt="Correlação entre SINESP e SIM por estado">
+    <div class="figcap">Cada ponto é um estado e a reta é o ajuste linear. Os pontos que fogem
+    dela mostram onde a classificação não acompanha o volume de óbitos.</div>
+    <div class="figsrc">Fonte SINESP-VDE e SIM, dados tratados na Fase 2. Tabela 09_divergencia_sinesp_sim</div>
+  </div>
+  <div class="callout">Os desvios também dizem algo. <b>São Paulo</b> registra muitos
+  feminicídios para o seu volume de óbitos, sinal de classificação madura. A <b>Bahia</b>
+  está no extremo oposto, com muitos óbitos de mulheres e poucos nomeados feminicídio. A
+  régua da classificação ainda não é a mesma nos 27 estados.</div>
+  <div class="pagenum corner">Fase 3 · 10</div>
+</section>
+
+<!-- ===================== P11 · TAXAS ===================== -->
+<section class="page portrait">
+  <div class="noise"></div>
+  <div class="sec-tag">Parte 6 · Taxas</div>
+  <h2 class="title-xl">Taxas por 100 mil, o próximo número</h2>
+  <div class="kicker">O denominador que falta e a fórmula já pronta</div>
+  <p class="lead">Até aqui todos os números são absolutos, e número absoluto confunde tamanho
+  de estado com gravidade do problema. São Paulo lidera em feminicídios porque tem mais
+  mulheres, não porque é mais perigoso. A medida justa é a <span class="brand">taxa por 100
+  mil mulheres</span>, que divide as mortes pela população feminina de cada estado em cada
+  ano. É o número que o Anuário do FBSP e o Atlas da Violência publicam, e é a última peça
+  para esta base conversar de igual para igual com eles.</p>
+
+  <div class="prosebox">
+    <p><b>A fórmula.</b> A taxa de um estado num ano é o número de óbitos de mulheres por
+    agressão dividido pela população feminina daquele estado e ano, multiplicado por 100 mil.
+    A mesma conta vale para a taxa de feminicídio.</p>
+    <p><b>O que falta.</b> A população feminina por estado, sexo e ano, de 2019 a 2024, vem
+    das Projeções da População do IBGE, revisão de 2024. O ambiente em que fechamos esta
+    entrega bloqueia o download direto do portal do IBGE, então a tabela de população entra
+    como fonte de referência versionada assim que estiver em mãos.</p>
+    <p><b>O encaixe já está feito.</b> O modelo ganha uma tabela de população ligada a
+    dim_uf e dim_tempo, e uma visão de taxas sobre as tabelas de fato que já existem, sem
+    reprocessar nada do que foi carregado. O dashboard e este relatório têm o espaço
+    reservado para a taxa entrar no lugar dos números absolutos.</p>
+  </div>
+  <div class="callout"><b>Por que isso muda tudo.</b> Com a taxa, a pergunta deixa de ser
+  onde morrem mais mulheres e passa a ser onde uma mulher corre mais risco. Estados pequenos
+  do Norte e do Nordeste, hoje escondidos atrás dos números de São Paulo e Minas, tendem a
+  aparecer no topo.</div>
+  <div class="pagenum corner">Fase 3 · 11</div>
+</section>
+
+<!-- ===================== P12 · RECOMENDAÇÕES ===================== -->
+<section class="page portrait">
+  <div class="noise"></div>
+  <div class="sec-tag">Parte 7 · Recomendações</div>
+  <h2 class="title-xl">O que os dados pedem</h2>
+  <div class="kicker">Seis recomendações, cada uma presa a um achado</div>
+  <p class="lead" style="font-size:10pt;margin-bottom:10px">Análise sem consequência é relatório
+  morto. Cada recomendação abaixo aponta para o achado que a sustenta. Nenhuma vem de fora
+  dos dados.</p>
+  <div class="two">
+    <div>
+      <div class="item"><span class="id">R-01</span><span><b>Controle de arma de fogo.</b> Metade das mortes passa por arma de fogo. É a alavanca de prevenção com maior retorno possível. Vem do Achado 3.</span></div>
+      <div class="item"><span class="id">R-02</span><span><b>Proteção com recorte racial no Norte e Nordeste.</b> Onde raça e território se somam, como em Alagoas, Amapá, Ceará e Bahia, acima de 88% de vítimas negras, a política precisa ser desenhada para essas mulheres. Vem do Achado 2.</span></div>
+      <div class="item"><span class="id">R-03</span><span><b>Foco na idade de 18 a 39 anos.</b> Essa faixa concentra 57% das mortes. É onde a rede de acolhimento e as medidas protetivas rendem mais. Vem do Achado 3.</span></div>
+    </div>
+    <div>
+      <div class="item"><span class="id">R-04</span><span><b>Reforço no segundo semestre.</b> O risco sobe até dezembro. Campanhas e plantões deveriam chegar antes do pico, não correr atrás dele. Vem do Achado 3.</span></div>
+      <div class="item"><span class="id">R-05</span><span><b>Padronizar a classificação entre os estados.</b> A captação subiu, mas de forma desigual, veja São Paulo e Bahia. Um protocolo único reduz a subnotificação. Vem dos Achados 1 e 4.</span></div>
+      <div class="item"><span class="id">R-06</span><span><b>Vigilância que cruza Segurança e Saúde.</b> A forte concordância de 0,82 mostra que integrar as bases é viável e multiplica o poder de monitoramento. Vem do Achado 4.</span></div>
+    </div>
+  </div>
+  <div class="callout"><b>Da base à política.</b> O mesmo banco que responde quantas agora
+  responde quem, como, onde e quando. São as quatro perguntas que transformam contagem em
+  decisão.</div>
+  <div class="pagenum corner">Fase 3 · 12</div>
+</section>
+
+<!-- ===================== P13 · LIMITAÇÕES + REPRODUÇÃO ===================== -->
+<section class="page portrait">
+  <div class="noise"></div>
+  <div class="sec-tag">Fecho · Confiança e reprodução</div>
+  <h2 class="title-xl">O que ainda não está perfeito</h2>
+  <div class="kicker">Limites honestos e como refazer tudo</div>
+  <div class="two">
+    <div>
+      <div class="blkh">Limitações</div>
+      <div class="item"><span class="id">L-01</span><span>Ainda sem taxas por 100 mil, até integrar a população do IBGE, que está encaminhada. Número absoluto não corrige o tamanho do estado.</span></div>
+      <div class="item"><span class="id">L-02</span><span>Feminicídio na SINESP e óbito por agressão no SIM são conceitos próximos, não idênticos. A razão de cerca de 2,4 entre eles é indicativa, não uma taxa exata de subnotificação.</span></div>
+      <div class="item"><span class="id">L-03</span><span>O SIM de 2024 é preliminar, o arquivo DO24OPEN, e pode ser revisado pelo Ministério da Saúde.</span></div>
+      <div class="item"><span class="id">L-04</span><span>1,5% dos óbitos têm raça ignorada e ficam no total, então o percentual de negras é conservador.</span></div>
+    </div>
+    <div>
+      <div class="blkh alt">Como reproduzir</div>
+      <div class="item"><span class="id alt">1</span><span>Partir dos CSVs tratados da Fase 2, em data/processed, ou recarregar o banco com o pipeline da Fase 2.</span></div>
+      <div class="item"><span class="id alt">2</span><span>Rodar <span class="brand">python analise/perguntas.py</span>, que gera as tabelas de resultado e o findings.json.</span></div>
+      <div class="item"><span class="id alt">3</span><span>Rodar <span class="brand">python analise/figuras.py</span>, que gera as oito figuras deste relatório.</span></div>
+      <div class="item"><span class="id alt">4</span><span>Rodar <span class="brand">python relatorio/build.py</span>, que monta este PDF a partir do HTML e das figuras.</span></div>
+    </div>
+  </div>
+  <div class="prosebox">
+    <p><b>O método em uma frase.</b> Nada é inventado. Cada tabela e cada figura é uma soma
+    determinística dos dados que a Fase 2 tratou e carregou. Rodar os scripts na ordem acima
+    reproduz este relatório número por número.</p>
+    <p><b>Continuidade.</b> Esta fase usa a camada de dados sem mexer nela, e deixa pronto o
+    encaixe das taxas populacionais, que é a ponte entre esta base e os indicadores nacionais.</p>
+  </div>
+  <div class="metablock" style="border-color:var(--c1)">
+    <div class="lbl">Equipe</div>
+    <div class="names" style="font-size:14px">Gustavo Souza Santos &nbsp;·&nbsp; Mateus Bulhões</div>
+    <div class="foot" style="opacity:.75;color:var(--ink);border:none;margin-top:10px">Repositório github.com/buga2023/fase2-etl-violencia-genero &nbsp;·&nbsp; Fase 3 · Outubro de 2026</div>
+  </div>
+  <div class="pagenum corner">Fase 3 · 13</div>
+</section>
+
+</body></html>
