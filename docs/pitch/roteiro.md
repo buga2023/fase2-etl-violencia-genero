@@ -20,6 +20,22 @@ Slides: link da apresentação no Classroom (as falas de cada slide estão nas n
 - [ ] Terminal aberto na pasta do repositório para o `./scripts/tf.sh plan`. O esperado é "No changes".
 - [ ] Plano B sem internet do Cloud: `streamlit run dashboard/app.py` local, que usa o mesmo banco.
 
+## Números do painel (sem filtro, 2019 a 2024)
+
+São os mesmos dos cards do painel e do slide 7. Vale decorar.
+
+| Indicador | Valor |
+|---|---|
+| Taxa de óbitos por agressão | 3,51 por 100 mil mulheres |
+| Vítimas negras | 67,1% |
+| Feminicídios registrados (vítimas mulheres) | 8.423, alta de 13,0% de 2019 a 2024 |
+| Mortes nomeadas como feminicídio | 37,1% |
+| Arma de fogo | 49,1% dos óbitos |
+| Maior e menor taxa por UF | RR 9,49 · SP 1,59 |
+| Regiões | Norte 5,14 · Nordeste 4,85 · Centro-Oeste 4,02 · Sul 3,45 · Sudeste 2,25 |
+
+O +12,8% do slide 8 conta todas as vítimas do evento Feminicídio (critério do FBSP). O +13,0% do card conta só mulheres, porque o painel abre com o filtro Sexo = Feminino.
+
 ## Perguntas prováveis
 
 **Por que vocês não usaram Spark ou Hadoop, se a disciplina fala deles?**
