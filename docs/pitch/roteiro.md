@@ -1,13 +1,13 @@
 # Pitch de 10 minutos: roteiro e defesa
 
-Slides: link da apresentação no Classroom (as falas de cada slide estão nas notas do apresentador).
+Slides: https://claude.ai/artifact/BeRfLyGcVTFiRZSFX7izEf (as falas de cada slide estão nas notas do apresentador; dá para baixar em PPTX ou PDF pelo menu da página).
 
 ## Divisão sugerida
 
 | Tempo | Slide | Quem |
 |---|---|---|
 | 0:00 a 1:40 | capa, problema | Gustavo |
-| 1:40 a 3:40 | arquitetura, Terraform (rodar `./scripts/tf.sh plan` ao vivo) | Gustavo |
+| 1:40 a 3:40 | arquitetura, Terraform (se der tempo, rodar `./scripts/tf.sh plan` ao vivo) | Gustavo |
 | 3:40 a 5:20 | tratamento, modelo e regras | Mateus |
 | 5:20 a 7:30 | KPIs, achado 1, achado 2 | Mateus |
 | 7:30 a 9:00 | demo ao vivo do painel | Gustavo |
@@ -20,7 +20,7 @@ Slides: link da apresentação no Classroom (as falas de cada slide estão nas n
 - [ ] Terminal aberto na pasta do repositório para o `./scripts/tf.sh plan`. O esperado é "No changes".
 - [ ] Plano B sem internet do Cloud: `streamlit run dashboard/app.py` local, que usa o mesmo banco.
 
-## Números do painel (sem filtro, 2019 a 2024)
+## Números do painel (filtro padrão Sexo = Feminino, 2019 a 2024)
 
 São os mesmos dos cards do painel e do slide 7. Vale decorar.
 

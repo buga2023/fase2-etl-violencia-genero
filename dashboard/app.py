@@ -176,6 +176,11 @@ with c1:
 
 with c2:
     st.session_state.setdefault("drill", [])
+    # se a região ou a UF mudarem na barra lateral, o drill-down volta para o começo
+    assinatura = (tuple(regioes), tuple(ufs))
+    if st.session_state.get("drill_filtros") != assinatura:
+        st.session_state["drill_filtros"] = assinatura
+        st.session_state["drill"] = []
     caminho = st.session_state["drill"]  # [] -> regiões; [região] -> UFs; [região, UF] -> municípios
     nivel = ["regiao", "uf", "municipio"][len(caminho)]
     st.subheader({"regiao": "Por região", "uf": f"Estados do {caminho[0] if caminho else ''}",
