@@ -58,3 +58,15 @@ SELECT COALESCE(a.ano, b.ano) AS ano, u.sigla AS uf, u.regiao,
 FROM sinesp a
 FULL JOIN sim b ON a.ano = b.ano AND a.cod_uf = b.cod_uf
 JOIN dim_uf u ON u.cod_uf = COALESCE(a.cod_uf, b.cod_uf);
+
+
+-- Taxas por 100 mil mulheres (regra de negócio R-TAXA): óbitos ou feminicídios / população feminina × 100.000.
+-- Mesma conta do Anuário do FBSP e do Atlas da Violência; corrige o tamanho do estado.
+CREATE OR REPLACE VIEW vw_taxas_uf_ano AS
+SELECT c.ano, c.uf, c.regiao, p.populacao AS populacao_feminina,
+       c.feminicidios_mulheres_sinesp, c.obitos_agressao_mulheres_sim, c.obitos_mulheres_negras_sim,
+       ROUND(100000.0 * c.feminicidios_mulheres_sinesp / p.populacao, 2) AS taxa_feminicidio_100mil,
+       ROUND(100000.0 * c.obitos_agressao_mulheres_sim / p.populacao, 2) AS taxa_obitos_agressao_100mil
+FROM vw_comparativo_uf_ano c
+JOIN dim_uf u ON u.sigla = c.uf
+JOIN populacao_feminina_uf p ON p.cod_uf = u.cod_uf AND p.ano = c.ano;

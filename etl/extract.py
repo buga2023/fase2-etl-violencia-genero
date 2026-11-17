@@ -62,6 +62,7 @@ def _csv_do_sim(ano: int) -> None:
 def baixar_fontes(baixar_sim: bool = True) -> None:
     """Baixa IBGE, SINESP e SIM (arquivos oficiais) para data/raw/."""
     _baixar(cfg.URL_IBGE_MUNICIPIOS, cfg.DIR_RAW / "ibge" / "municipios.json")
+    _baixar(cfg.URL_IBGE_PROJECAO, cfg.DIR_RAW / "ibge" / cfg.ARQ_IBGE_PROJECAO)
     for ano in range(cfg.ANO_INICIO, cfg.ANO_FIM + 1):
         _baixar(cfg.URL_SINESP.format(ano=ano), cfg.DIR_RAW / "sinesp" / f"BancoVDE {ano}.xlsx")
         if baixar_sim:

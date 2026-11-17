@@ -117,5 +117,12 @@
     "tamanho_bytes": 2372050,
     "sha256": "77bf68d9f5b1237522bcd28c39b8857725ebb25e913a5b13aa4a740ce67041b4",
     "modificado_em": "2026-10-10T22:41:13.965349+00:00"
+  },
+  {
+    "fonte": "IBGE",
+    "arquivo": "ibge/projecoes_2024_tab2_grupo_quinquenal.xlsx",
+    "tamanho_bytes": 1030533,
+    "sha256": "57f997f1ee003fb1138b1016805d0b5dc452f15073b875ef4e6ab0943023a1bb",
+    "modificado_em": "2026-11-17T11:46:06.678412+00:00"
   }
 ]

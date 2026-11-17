@@ -12,6 +12,7 @@ UNION ALL SELECT 'dim_evento', COUNT(*) FROM dim_evento
 UNION ALL SELECT 'dim_meio_agressao', COUNT(*) FROM dim_meio_agressao
 UNION ALL SELECT 'fato_vitimas_sinesp', COUNT(*) FROM fato_vitimas_sinesp
 UNION ALL SELECT 'fato_obitos_agressao_sim', COUNT(*) FROM fato_obitos_agressao_sim
+UNION ALL SELECT 'populacao_feminina_uf', COUNT(*) FROM populacao_feminina_uf
 UNION ALL SELECT 'meta_carga', COUNT(*) FROM meta_carga;
 
 -- 2. Espaço ocupado (limite do Free Tier: 1 GB)
