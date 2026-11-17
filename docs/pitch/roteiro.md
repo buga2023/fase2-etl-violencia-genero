@@ -38,7 +38,7 @@ Em nenhum arquivo do repositório. Local, no `.env` e no `.streamlit/secrets.tom
 Os dados são tabelas com chaves, a análise é JOIN e GROUP BY, e a integridade entre as duas fontes depende de chave estrangeira. OpenSearch é bom para busca em texto livre e logs, que não temos.
 
 **Como vocês sabem que o tratamento está certo?**
-Três coisas. Os totais batem antes e depois de cada etapa (o relatório de tratamento mostra). Tem 9 testes automatizados com arquivos sintéticos que têm os defeitos reais. E o resultado bate com quem publica: 1.501 feminicídios em 2024 contra 1.504 do FBSP, e 68,1% de vítimas negras em 2023 contra 68,2% do Atlas da Violência.
+Três coisas. Os totais batem antes e depois de cada etapa (o relatório de tratamento mostra). Tem 9 testes automatizados com arquivos sintéticos que têm os defeitos reais. E o resultado bate com quem publica: 1.501 feminicídios em 2024 (todas as vítimas, mesmo critério do Anuário) contra 1.504 do FBSP, e 68,1% de vítimas negras em 2023 contra 68,2% do Atlas da Violência.
 
 **Feminicídio e óbito por agressão não são a mesma coisa. Por que comparar?**
 Não são, e a gente deixa isso claro. Feminicídio é a classificação policial de um crime por razão de gênero. Óbito por agressão é toda mulher morta por violência. Por isso o KPI de captação (37%) é um indicador de quanto das mortes é reconhecido como feminicídio, não uma taxa exata de subnotificação.
