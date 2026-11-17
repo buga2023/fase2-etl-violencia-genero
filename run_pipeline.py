@@ -13,7 +13,7 @@ import pandas as pd
 from dotenv import load_dotenv
 
 from etl import config as cfg
-from etl import dimensoes, extract, transform_sim, transform_sinesp
+from etl import dimensoes, extract, populacao, transform_sim, transform_sinesp
 
 
 def _fmt(n) -> str:
@@ -87,7 +87,12 @@ def main():
             cargas.append({**c, "fonte": fonte, "sha256": m["sha256"], "tamanho_bytes": m["tamanho_bytes"],
                            "arquivo_origem": origem["arquivo"].split("/", 1)[1] if origem else None,
                            "sha256_origem": origem["sha256"] if origem else None})
-    ibge = next(m for m in manifesto if m["fonte"] == "IBGE")
+    tabelas["populacao_feminina_uf"] = populacao.transformar()
+    proj = next(m for m in manifesto if m["arquivo"].endswith(cfg.ARQ_IBGE_PROJECAO))
+    cargas.append({"fonte": "IBGE", "arquivo": cfg.ARQ_IBGE_PROJECAO, "sha256": proj["sha256"],
+                   "tamanho_bytes": proj["tamanho_bytes"], "linhas_lidas": tabelas["populacao_feminina_uf"].attrs["linhas_lidas"],
+                   "linhas_apos_filtro": len(tabelas["populacao_feminina_uf"])})
+    ibge = next(m for m in manifesto if m["fonte"] == "IBGE" and m["arquivo"].endswith("municipios.json"))
     cargas.append({"fonte": "IBGE", "arquivo": ibge["arquivo"].split("/", 1)[1], "sha256": ibge["sha256"],
                    "tamanho_bytes": ibge["tamanho_bytes"], "linhas_lidas": len(tabelas["dim_municipio"]) - 27,
                    "linhas_apos_filtro": len(tabelas["dim_municipio"]) - 27})
