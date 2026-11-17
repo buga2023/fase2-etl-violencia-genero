@@ -1,0 +1,6 @@
+# Dependências só do painel (o Streamlit Cloud lê este arquivo, na pasta do app)
+streamlit==1.67.0
+plotly==7.1.0
+pandas==2.2.3
+psycopg[binary]==3.2.3
+python-dotenv==1.2.4
