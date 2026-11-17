@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pandas as pd
 
-RAIZ = Path(__file__).resolve().parent.parent
+RAIZ = Path(__file__).resolve().parent.parent.parent
 P = RAIZ / "data" / "processed"
 TPL = Path(__file__).with_name("template.html")
 OUT = Path(__file__).with_name("painel_feminicidio_interseccional.html")

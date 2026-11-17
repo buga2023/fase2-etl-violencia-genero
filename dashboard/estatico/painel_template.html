@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel Fase 3 — Feminicídio interseccional</title>
+<style>
+:root{
+  --paper:#F7F4EE; --panel:#FCFAF5; --panel2:#EFEAE0; --ink:#1C1C1C; --mute:#5a4a3a;
+  --line:rgba(28,28,28,.14); --c1:#5C1F2A; --c3:#9D7B3F;
+  --sinesp:#1C6EA4; --sim:#C0442F; --grid:rgba(28,28,28,.08);
+  --neg:#7A2E38; --nneg:#C9A9A2;
+}
+:root[data-theme="dark"]{
+  --paper:#17140F; --panel:#201C16; --panel2:#2A251D; --ink:#F3ECE0; --mute:#C9BBA6;
+  --line:rgba(243,236,224,.16); --c1:#D98A96; --c3:#D9B877;
+  --sinesp:#4E97C8; --sim:#E0714F; --grid:rgba(243,236,224,.10);
+  --neg:#D98A96; --nneg:#8C6F6A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:'Inter Tight',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  line-height:1.5;-webkit-font-smoothing:antialiased;padding:0 0 60px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header{border-bottom:1.5px solid var(--ink);padding:22px 0 16px;margin-bottom:18px}
+.htop{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+h1{font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:-.01em;font-weight:700}
+h1 .dot{color:var(--c1)}
+.sub{color:var(--mute);font-size:13px;margin-top:4px;max-width:720px}
+.tools{display:flex;gap:8px;align-items:center}
+button,select{font-family:inherit;font-size:12.5px;color:var(--ink);background:var(--panel);
+  border:1.3px solid var(--line);border-radius:8px;padding:7px 11px;cursor:pointer}
+button:hover,select:hover{border-color:var(--c1)}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;
+  background:var(--panel);border:1.3px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--mute);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font-size:11.5px;padding:4px 9px;border-radius:999px;border:1.3px solid var(--line);
+  background:var(--panel2);cursor:pointer;user-select:none}
+.chip.on{background:var(--c1);color:#fff;border-color:var(--c1)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:var(--panel);border:1.3px solid var(--line);border-radius:12px;padding:15px 16px}
+.kpi .n{font-family:Georgia,serif;font-size:30px;font-weight:700;color:var(--c1);letter-spacing:-.02em;line-height:1}
+.kpi .c{font-size:12px;margin-top:7px;color:var(--ink)}
+.kpi .s{font-size:10px;color:var(--mute);margin-top:4px;font-variant-numeric:tabular-nums}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1.3px solid var(--line);border-radius:12px;padding:15px 16px;min-width:0}
+.card.full{grid-column:1/-1}
+.card h3{font-family:Georgia,serif;font-size:16px;font-weight:700;color:var(--c1)}
+.card .k{font-size:11.5px;color:var(--mute);margin:2px 0 10px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--mute);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.axis{stroke:var(--grid);stroke-width:1}
+.axlab{fill:var(--mute);font-size:10px}
+.vlab{fill:var(--ink);font-size:10px;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px}
+th{text-align:right;padding:7px 8px;font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;
+  background:var(--ink);color:var(--paper);cursor:pointer;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+tbody tr:nth-child(even){background:var(--panel2)}
+.note{font-size:11px;color:var(--mute);margin-top:12px;font-style:italic}
+.pill{display:inline-block;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:700;color:#fff}
+.empty{color:var(--mute);font-size:12px;padding:20px;text-align:center}
+.bar-mark:hover{opacity:.8}
+.foot{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-size:11px;color:var(--mute)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="htop">
+      <div>
+        <h1>Feminicídio interseccional, a leitura analítica<span class="dot">.</span></h1>
+        <div class="sub">Fase 3 · Brasil, de 2019 a 2024. Registro policial da SINESP-VDE e óbitos de mulheres por agressão no SIM, com recorte de raça, cor, idade e meio. Todos os filtros valem para todos os gráficos.</div>
+      </div>
+      <div class="tools">
+        <button id="tema">Tema claro ou escuro</button>
+        <button id="limpar">Limpar filtros</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="filters" id="filtros"></div>
+  <div class="kpis" id="kpis"></div>
+
+  <div class="grid">
+    <div class="card full">
+      <h3>Três leituras ao longo do tempo</h3>
+      <div class="k">Contagens de cada ano. O registro de feminicídio na SINESP e os óbitos de mulheres por agressão no SIM.</div>
+      <div id="c_serie"></div>
+      <div class="legend">
+        <span><i style="background:var(--sinesp)"></i>Feminicídios na SINESP</span>
+        <span><i style="background:var(--sim)"></i>Óbitos por agressão no SIM</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>% de mulheres negras por UF</h3>
+      <div class="k">Pretas e pardas entre os óbitos do SIM, ordenado.</div>
+      <div id="c_negras"></div>
+    </div>
+
+    <div class="card">
+      <h3>Óbitos por raça e cor</h3>
+      <div class="k">Composição no recorte selecionado, segundo o SIM.</div>
+      <div id="c_raca"></div>
+    </div>
+
+    <div class="card">
+      <h3>Meio de agressão</h3>
+      <div class="k">Como as mulheres são mortas, segundo o SIM e a CID-10.</div>
+      <div id="c_meio"></div>
+    </div>
+
+    <div class="card">
+      <h3>Faixa etária</h3>
+      <div class="k">Idade da vítima na declaração de óbito do SIM.</div>
+      <div id="c_faixa"></div>
+    </div>
+
+    <div class="card full">
+      <h3>As duas fontes concordam no espaço</h3>
+      <div class="k">Cada ponto é um estado, no ano selecionado. Feminicídios na SINESP contra óbitos por agressão no SIM.</div>
+      <div id="c_scatter"></div>
+    </div>
+
+    <div class="card full">
+      <h3>Ranking por estado</h3>
+      <div class="k">Clique no cabeçalho para ordenar. <a id="csv" href="#" style="color:var(--c1)">baixar CSV</a></div>
+      <div id="tabela"></div>
+    </div>
+  </div>
+
+  <div class="foot" id="rodape"></div>
+</div>
+
+<script>/*__DADOS__*/</script>
+<script>
+(function(){
+"use strict";
+var D = window.DADOS;
+var UF = {}, REG = {}; D.ufs.forEach(function(u){UF[u[0]]={nome:u[1],regiao:u[2]};REG[u[0]]=u[2];});
+var NEG = {}; D.racas.forEach(function(r){NEG[r[0]]=r[1];});
+var SC={ano:0,uf:1,raca:2,negra:3,faixa:4,meio:5,q:6};
+var NC={ano:0,uf:1,fem:2,vlm:3};
+var fmtI=function(n){return Math.round(n).toLocaleString('pt-BR');};
+var fmtP=function(n){return n.toFixed(1).replace('.',',')+'%';};
+
+// ---- estado dos filtros ----
+var F={anos:new Set(D.anos),regiao:'',uf:'',raca:'',faixa:'',meio:''};
+
+// ---- construir filtros ----
+var fl=document.getElementById('filtros');
+function opt(v,t){return '<option value="'+v+'">'+t+'</option>';}
+fl.innerHTML=''
+ +'<div class="fg" style="grid-column:1/-1"><label>Anos</label><div class="chips" id="fanos"></div></div>'
+ +'<div class="fg"><label>Região</label><select id="freg"><option value="">Todas</option>'+D.regioes.map(function(r){return opt(r,r);}).join('')+'</select></div>'
+ +'<div class="fg"><label>UF</label><select id="fuf"><option value="">Todas</option>'+D.ufs.map(function(u){return opt(u[0],u[0]+' — '+u[1]);}).join('')+'</select></div>'
+ +'<div class="fg"><label>Raça e cor</label><select id="fraca"><option value="">Todas</option>'+D.racas.map(function(r){return opt(r[0],r[0]);}).join('')+'</select></div>'
+ +'<div class="fg"><label>Faixa etária</label><select id="ffaixa"><option value="">Todas</option>'+D.faixas.map(function(f){return opt(f,f);}).join('')+'</select></div>'
+ +'<div class="fg"><label>Meio</label><select id="fmeio"><option value="">Todos</option>'+D.meios.map(function(m){return opt(m,m);}).join('')+'</select></div>';
+var fanos=document.getElementById('fanos');
+D.anos.forEach(function(a){var c=document.createElement('span');c.className='chip on';c.textContent=a;
+  c.onclick=function(){if(F.anos.has(a)){if(F.anos.size>1){F.anos.delete(a);c.classList.remove('on');}}else{F.anos.add(a);c.classList.add('on');}render();};
+  fanos.appendChild(c);});
+function bindSel(id,key){document.getElementById(id).onchange=function(){F[key]=this.value;
+  if(key==='regiao'&&this.value){F.uf='';document.getElementById('fuf').value='';}
+  if(key==='uf'&&this.value){F.regiao='';document.getElementById('freg').value='';}
+  render();};}
+bindSel('freg','regiao');bindSel('fuf','uf');bindSel('fraca','raca');bindSel('ffaixa','faixa');bindSel('fmeio','meio');
+
+document.getElementById('limpar').onclick=function(){
+  F={anos:new Set(D.anos),regiao:'',uf:'',raca:'',faixa:'',meio:''};
+  ['freg','fuf','fraca','ffaixa','fmeio'].forEach(function(id){document.getElementById(id).value='';});
+  Array.prototype.forEach.call(fanos.children,function(c){c.classList.add('on');});
+  render();};
+
+// ---- tema ----
+(function(){try{var t=localStorage.getItem('fase3_tema');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+document.getElementById('tema').onclick=function(){
+  var cur=document.documentElement.getAttribute('data-theme')==='dark'?'':'dark';
+  if(cur)document.documentElement.setAttribute('data-theme',cur);else document.documentElement.removeAttribute('data-theme');
+  try{localStorage.setItem('fase3_tema',cur);}catch(e){}
+  render();};
+
+// ---- filtragem ----
+function simFiltrado(){
+  return D.sim.filter(function(r){
+    if(!F.anos.has(r[SC.ano]))return false;
+    if(F.uf&&r[SC.uf]!==F.uf)return false;
+    if(F.regiao&&REG[r[SC.uf]]!==F.regiao)return false;
+    if(F.raca&&r[SC.raca]!==F.raca)return false;
+    if(F.faixa&&r[SC.faixa]!==F.faixa)return false;
+    if(F.meio&&r[SC.meio]!==F.meio)return false;
+    return true;});
+}
+function sinespFiltrado(){
+  return D.sinesp.filter(function(r){
+    if(!F.anos.has(r[NC.ano]))return false;
+    if(F.uf&&r[NC.uf]!==F.uf)return false;
+    if(F.regiao&&REG[r[NC.uf]]!==F.regiao)return false;
+    return true;});
+}
+function somaBy(rows,keyIdx,valIdx){var m={};rows.forEach(function(r){var k=r[keyIdx];m[k]=(m[k]||0)+r[valIdx];});return m;}
+
+// ====== CHARTS (SVG) ======
+var cv=getComputedStyle(document.documentElement);
+function col(v){return cv.getPropertyValue(v).trim();}
+function el(tag,attrs,kids){var e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(var k in attrs)e.setAttribute(k,attrs[k]);if(kids)e.textContent=kids;return e;}
+function svg(w,h){return el('svg',{viewBox:'0 0 '+w+' '+h,preserveAspectRatio:'xMidYMid meet'});}
+function title(e,t){var ti=document.createElementNS('http://www.w3.org/2000/svg','title');ti.textContent=t;e.appendChild(ti);}
+
+function hbar(mount,items,color,fmt){
+  mount.innerHTML='';if(!items.length){mount.innerHTML='<div class="empty">Sem dados no filtro.</div>';return;}
+  var W=560,rh=20,pad=6,lw=46,rw=56,h=items.length*rh+pad*2;
+  var s=svg(W,h);var max=Math.max.apply(null,items.map(function(d){return d.v;}))||1;
+  items.forEach(function(d,i){var y=pad+i*rh;
+    var bw=(W-lw-rw)*d.v/max;
+    s.appendChild(el('text',{x:lw-6,y:y+rh/2+3,'text-anchor':'end',class:'axlab'},d.l));
+    var c=typeof color==='function'?color(d,i,max):color;
+    var r=el('rect',{x:lw,y:y+2,width:Math.max(bw,1),height:rh-6,rx:3,fill:c,class:'bar-mark'});
+    title(r,d.l+': '+fmt(d.v));s.appendChild(r);
+    s.appendChild(el('text',{x:lw+bw+5,y:y+rh/2+3,class:'vlab'},fmt(d.v)));});
+  mount.appendChild(s);
+}
+function vbar(mount,items,color,fmt){
+  mount.innerHTML='';if(!items.length){mount.innerHTML='<div class="empty">Sem dados no filtro.</div>';return;}
+  var W=560,H=210,padb=26,padt=16,padl=8,padr=8,n=items.length;
+  var s=svg(W,H);var max=Math.max.apply(null,items.map(function(d){return d.v;}))||1;
+  var bw=(W-padl-padr)/n;
+  items.forEach(function(d,i){var bh=(H-padb-padt)*d.v/max;var x=padl+i*bw;var y=H-padb-bh;
+    var c=typeof color==='function'?color(d,i,max):color;
+    var r=el('rect',{x:x+bw*0.14,y:y,width:bw*0.72,height:Math.max(bh,1),rx:3,fill:c,class:'bar-mark'});
+    title(r,d.l+': '+fmt(d.v));s.appendChild(r);
+    s.appendChild(el('text',{x:x+bw/2,y:y-4,'text-anchor':'middle',class:'vlab'},fmt(d.v)));
+    s.appendChild(el('text',{x:x+bw/2,y:H-padb+13,'text-anchor':'middle',class:'axlab'},d.l));});
+  mount.appendChild(s);
+}
+function lines(mount,xlabels,series,fmt){
+  mount.innerHTML='';
+  var W=900,H=250,padl=44,padr=58,padt=14,padb=26;
+  var s=svg(W,H);
+  var all=[];series.forEach(function(se){se.pts.forEach(function(p){all.push(p);});});
+  var max=Math.max.apply(null,all)||1;max=max*1.12;
+  var n=xlabels.length;var xx=function(i){return padl+(W-padl-padr)*(n<2?0.5:i/(n-1));};
+  var yy=function(v){return H-padb-(H-padt-padb)*v/max;};
+  [0,.25,.5,.75,1].forEach(function(t){var v=max*t;var y=yy(v);
+    s.appendChild(el('line',{x1:padl,y1:y,x2:W-padr,y2:y,class:'axis'}));
+    s.appendChild(el('text',{x:padl-6,y:y+3,'text-anchor':'end',class:'axlab'},fmtI(v)));});
+  xlabels.forEach(function(l,i){s.appendChild(el('text',{x:xx(i),y:H-padb+14,'text-anchor':'middle',class:'axlab'},l));});
+  series.forEach(function(se){
+    var dpath=se.pts.map(function(p,i){return (i?'L':'M')+xx(i)+' '+yy(p);}).join(' ');
+    s.appendChild(el('path',{d:dpath,fill:'none',stroke:se.color,'stroke-width':2.4,'stroke-linejoin':'round'}));
+    se.pts.forEach(function(p,i){var c=el('circle',{cx:xx(i),cy:yy(p),r:3.4,fill:se.color});title(c,se.name+' '+xlabels[i]+': '+fmt(p));s.appendChild(c);});
+    var last=se.pts.length-1;
+    s.appendChild(el('text',{x:xx(last)+6,y:yy(se.pts[last])+3,fill:se.color,'font-size':11,'font-weight':700},fmtI(se.pts[last])));});
+  mount.appendChild(s);
+}
+function scatter(mount,pts,fmt){
+  mount.innerHTML='';if(!pts.length){mount.innerHTML='<div class="empty">Sem dados no filtro.</div>';return;}
+  var W=900,H=320,padl=50,padr=20,padt=14,padb=34;
+  var s=svg(W,H);
+  var mx=Math.max.apply(null,pts.map(function(p){return p.x;}))*1.1||1;
+  var my=Math.max.apply(null,pts.map(function(p){return p.y;}))*1.1||1;
+  var xx=function(v){return padl+(W-padl-padr)*v/mx;};var yy=function(v){return H-padb-(H-padt-padb)*v/my;};
+  [0,.25,.5,.75,1].forEach(function(t){var y=yy(my*t);s.appendChild(el('line',{x1:padl,y1:y,x2:W-padr,y2:y,class:'axis'}));
+    s.appendChild(el('text',{x:padl-6,y:y+3,'text-anchor':'end',class:'axlab'},fmtI(my*t)));});
+  // regressao simples
+  var n=pts.length,sx=0,sy=0,sxy=0,sxx=0;pts.forEach(function(p){sx+=p.x;sy+=p.y;sxy+=p.x*p.y;sxx+=p.x*p.x;});
+  var b=(n*sxy-sx*sy)/((n*sxx-sx*sx)||1),a=(sy-b*sx)/n;
+  s.appendChild(el('line',{x1:xx(0),y1:yy(a),x2:xx(mx),y2:yy(a+b*mx),stroke:col('--c3'),'stroke-width':1.6,'stroke-dasharray':'5 4'}));
+  pts.forEach(function(p){var c=el('circle',{cx:xx(p.x),cy:yy(p.y),r:4.5,fill:col('--c1'),'fill-opacity':.8,stroke:col('--panel'),'stroke-width':1});
+    title(c,p.l+' — SINESP '+fmtI(p.x)+' · SIM '+fmtI(p.y));s.appendChild(c);
+    if(p.x>mx*0.3||p.y>my*0.45)s.appendChild(el('text',{x:xx(p.x)+6,y:yy(p.y)+3,class:'axlab'},p.l));});
+  s.appendChild(el('text',{x:(padl+W-padr)/2,y:H-4,'text-anchor':'middle',class:'axlab'},'Feminicídios registrados na SINESP, por estado'));
+  mount.appendChild(s);
+}
+
+// ====== RENDER ======
+var tbSort={k:'fem',dir:-1};
+function render(){
+  var sim=simFiltrado(),sin=sinespFiltrado();
+  var totSim=sim.reduce(function(a,r){return a+r[SC.q];},0);
+  var totNeg=sim.reduce(function(a,r){return a+(r[SC.negra]?r[SC.q]:0);},0);
+  var totFem=sin.reduce(function(a,r){return a+r[NC.fem];},0);
+  var fogo=sim.reduce(function(a,r){return a+(r[SC.meio]==='Arma de fogo'?r[SC.q]:0);},0);
+  var pctNeg=totSim?100*totNeg/totSim:0,pctFogo=totSim?100*fogo/totSim:0;
+
+  document.getElementById('kpis').innerHTML=
+   kpi(fmtI(totFem),'Feminicídios registrados','SINESP · '+anosTxt())
+  +kpi(fmtI(totSim),'Óbitos de mulheres por agressão','SIM · '+anosTxt())
+  +kpi(fmtP(pctNeg),'eram mulheres negras','pretas e pardas · '+fmtI(totNeg)+' de '+fmtI(totSim))
+  +kpi(fmtP(pctFogo),'mortas por arma de fogo','SIM · '+fmtI(fogo)+' óbitos');
+
+  // serie anual
+  var anos=D.anos.filter(function(a){return F.anos.has(a);});
+  var femByAno=somaBy(sin,NC.ano,NC.fem),simByAno=somaBy(sim,SC.ano,SC.q);
+  lines(document.getElementById('c_serie'),anos.map(String),[
+    {name:'Feminicídios (SINESP)',color:col('--sinesp'),pts:anos.map(function(a){return femByAno[a]||0;})},
+    {name:'Óbitos por agressão (SIM)',color:col('--sim'),pts:anos.map(function(a){return simByAno[a]||0;})}
+  ],fmtI);
+
+  // % negras por UF
+  var porUf={};sim.forEach(function(r){var u=porUf[r[SC.uf]]||(porUf[r[SC.uf]]={t:0,n:0});u.t+=r[SC.q];u.n+=r[SC.negra]?r[SC.q]:0;});
+  var negras=Object.keys(porUf).map(function(u){return{l:u,v:porUf[u].t?100*porUf[u].n/porUf[u].t:0};})
+    .sort(function(a,b){return b.v-a.v;});
+  hbar(document.getElementById('c_negras'),negras,function(d){return col('--neg');},fmtP);
+
+  // raca composicao
+  var porRaca=somaBy(sim,SC.raca,SC.q);
+  var raca=D.racas.map(function(r){return{l:r[0],v:porRaca[r[0]]||0,neg:r[1]};}).filter(function(d){return d.v>0;})
+    .sort(function(a,b){return b.v-a.v;});
+  hbar(document.getElementById('c_raca'),raca,function(d){return d.neg?col('--neg'):col('--nneg');},fmtI);
+
+  // meio
+  var porMeio=somaBy(sim,SC.meio,SC.q);
+  var meio=D.meios.map(function(m){return{l:m,v:porMeio[m]||0};}).filter(function(d){return d.v>0;})
+    .sort(function(a,b){return b.v-a.v;});
+  hbar(document.getElementById('c_meio'),meio,col('--sim'),fmtI);
+
+  // faixa
+  var porFaixa=somaBy(sim,SC.faixa,SC.q);
+  var faixa=D.faixas.map(function(f){return{l:f,v:porFaixa[f]||0};});
+  var fmax=Math.max.apply(null,faixa.map(function(d){return d.v;}));
+  vbar(document.getElementById('c_faixa'),faixa,function(d){return d.v===fmax?col('--sim'):col('--nneg');},fmtI);
+
+  // scatter por UF
+  var femU=somaBy(sin,NC.uf,NC.fem),simU=somaBy(sim,SC.uf,SC.q);
+  var pts=Object.keys(simU).map(function(u){return{l:u,x:femU[u]||0,y:simU[u]||0};}).filter(function(p){return p.x||p.y;});
+  scatter(document.getElementById('c_scatter'),pts,fmtI);
+
+  // tabela
+  renderTabela(sim,sin);
+  document.getElementById('rodape').textContent='Fonte: '+D.fonte+' No recorte atual, '+fmtI(totFem)+' feminicídios e '+fmtI(totSim)+' óbitos.';
+}
+function kpi(n,c,s){return '<div class="kpi"><div class="n">'+n+'</div><div class="c">'+c+'</div><div class="s">'+s+'</div></div>';}
+function anosTxt(){var a=D.anos.filter(function(x){return F.anos.has(x);});return a.length===D.anos.length?(a[0]+' a '+a[a.length-1]):a.join(', ');}
+
+function renderTabela(sim,sin){
+  var femU=somaBy(sin,NC.uf,NC.fem);
+  var agg={};sim.forEach(function(r){var u=agg[r[SC.uf]]||(agg[r[SC.uf]]={uf:r[SC.uf],sim:0,neg:0});u.sim+=r[SC.q];u.neg+=r[SC.negra]?r[SC.q]:0;});
+  var rows=Object.keys(agg).map(function(u){var o=agg[u];return{uf:u,nome:UF[u].nome,regiao:UF[u].regiao,
+    fem:femU[u]||0,sim:o.sim,pctneg:o.sim?100*o.neg/o.sim:0};});
+  // incluir UFs so com feminicidio
+  Object.keys(femU).forEach(function(u){if(!agg[u])rows.push({uf:u,nome:UF[u].nome,regiao:UF[u].regiao,fem:femU[u],sim:0,pctneg:0});});
+  rows.sort(function(a,b){var v=(a[tbSort.k]<b[tbSort.k]?-1:a[tbSort.k]>b[tbSort.k]?1:0);return v*tbSort.dir;});
+  var cols=[['uf','UF'],['nome','Estado'],['regiao','Região'],['fem','Feminicídios'],['sim','Óbitos (SIM)'],['pctneg','% negras']];
+  var h='<table><thead><tr>'+cols.map(function(c){return '<th data-k="'+c[0]+'">'+c[1]+(tbSort.k===c[0]?(tbSort.dir<0?' ▾':' ▴'):'')+'</th>';}).join('')+'</tr></thead><tbody>'
+    +rows.map(function(r){return '<tr><td><b>'+r.uf+'</b></td><td>'+r.nome+'</td><td>'+r.regiao+'</td><td>'+fmtI(r.fem)+'</td><td>'+fmtI(r.sim)+'</td><td>'+fmtP(r.pctneg)+'</td></tr>';}).join('')
+    +'</tbody></table>';
+  var mount=document.getElementById('tabela');mount.innerHTML=h;
+  Array.prototype.forEach.call(mount.querySelectorAll('th'),function(th){th.onclick=function(){var k=th.getAttribute('data-k');
+    if(tbSort.k===k)tbSort.dir*=-1;else{tbSort.k=k;tbSort.dir=(k==='uf'||k==='nome'||k==='regiao')?1:-1;}renderTabela(sim,sin);};});
+  document.getElementById('csv').onclick=function(e){e.preventDefault();
+    var csv='uf,estado,regiao,feminicidios,obitos_sim,pct_negras\n'+rows.map(function(r){return [r.uf,r.nome,r.regiao,r.fem,r.sim,r.pctneg.toFixed(1)].join(',');}).join('\n');
+    var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='ranking_uf_fase3.csv';a.click();};
+}
+render();
+})();
+</script>
+</body>
+</html>
