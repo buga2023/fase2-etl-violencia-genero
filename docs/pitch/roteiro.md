@@ -26,7 +26,7 @@ Slides: link da apresentação no Classroom (as falas de cada slide estão nas n
 Porque o volume não pedia. São uns 2,6 GB brutos, e o pandas lendo em blocos de 200 mil linhas processa tudo num notebook comum com memória constante. Spark faz sentido quando o dado não cabe numa máquina. Se a gente pegasse o SIM desde 1996, ou microdados de outras bases grandes, a troca seria PySpark, mantendo as mesmas regras do `etl/config.py`.
 
 **Como vocês lidaram com o limite de 1 GB do Aiven?**
-Filtrando na leitura (só agressão, só mulheres, só 6 colunas) e agregando por mês, município e categoria antes de carregar. 13,9 milhões de linhas viraram 256 mil. O schema ocupa uns 37 MB.
+Filtrando na leitura (só agressão, só mulheres, só 6 colunas) e agregando por mês, município e categoria antes de carregar. 13,9 milhões de linhas viraram 256 mil. O schema ocupa uns 25 MB, cerca de 2,5% do plano.
 
 **O painel consulta mesmo o banco ou os dados estão no arquivo?**
 Consulta o banco. Não tem nenhum CSV no app. Cada filtro roda SQL no Aiven com o usuário `painel_leitura`. Dá para ver em "Ver as consultas", com o horário e os milissegundos de cada uma. Tem um cache de 2 minutos para não sobrecarregar o plano free, e o botão "Consultar o banco de novo" limpa esse cache.
@@ -42,6 +42,9 @@ Três coisas. Os totais batem antes e depois de cada etapa (o relatório de trat
 
 **Feminicídio e óbito por agressão não são a mesma coisa. Por que comparar?**
 Não são, e a gente deixa isso claro. Feminicídio é a classificação policial de um crime por razão de gênero. Óbito por agressão é toda mulher morta por violência. Por isso o KPI de captação (37%) é um indicador de quanto das mortes é reconhecido como feminicídio, não uma taxa exata de subnotificação.
+
+**Por que o KPI de captação some quando filtro por raça?**
+Porque raça, idade e meio só existem no SIM. A SINESP não registra a raça, então não dá para dividir feminicídios de mulheres negras por óbitos de mulheres negras. Em vez de mostrar uma conta errada, o painel deixa o card em branco e explica.
 
 **Por que 2024 cai no gráfico?**
 O SIM de 2024 ainda é preliminar, com uns 7% menos óbitos que 2023. O próprio gráfico avisa. Quando o DataSUS publicar a versão final, é só rodar o pipeline de novo.

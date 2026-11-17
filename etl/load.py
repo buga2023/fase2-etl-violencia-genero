@@ -46,3 +46,16 @@ def carregar(url: str, tabelas: dict[str, pd.DataFrame], cargas: list[dict]) -> 
                        AND table_name NOT LIKE 'vw\\_%' ORDER BY table_name, ordinal_position""")
         colunas = cur.fetchall()
     return {"contagem": contagem, "tamanhos": tamanhos, "colunas": colunas}
+
+
+def aplicar_permissoes_painel(url: str) -> bool:
+    """GRANT de leitura para o usuário do dashboard (criado pelo Terraform).
+
+    O schema vde é recriado a cada carga, então o GRANT precisa ser refeito toda vez.
+    Devolve False se o usuário ainda não existe (terraform apply não foi rodado).
+    """
+    with psycopg.connect(url) as con:
+        if not con.execute("SELECT 1 FROM pg_roles WHERE rolname = 'painel_leitura'").fetchone():
+            return False
+        con.execute((cfg.DIR_SQL / "04_usuario_painel.sql").read_text(encoding="utf-8"))
+    return True

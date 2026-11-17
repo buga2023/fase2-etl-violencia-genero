@@ -12,7 +12,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
-import psycopg
 from dotenv import load_dotenv
 
 from etl import config as cfg
@@ -71,14 +70,10 @@ def main() -> None:
     for nome, n in res["contagem"].items():
         print(f"{nome:28s} {n:>8,}".replace(",", "."))
 
-    # permissões do usuário do painel (o schema é recriado a cada carga, então refaz o GRANT)
-    with psycopg.connect(url) as con:
-        existe = con.execute("SELECT 1 FROM pg_roles WHERE rolname = 'painel_leitura'").fetchone()
-        if existe:
-            con.execute((cfg.DIR_SQL / "04_usuario_painel.sql").read_text(encoding="utf-8"))
-            print("GRANT de leitura aplicado para painel_leitura")
-        else:
-            print("usuário painel_leitura não existe (rode o terraform apply antes)")
+    if load.aplicar_permissoes_painel(url):
+        print("GRANT de leitura aplicado para painel_leitura")
+    else:
+        print("usuário painel_leitura não existe (rode o terraform apply antes)")
 
 
 if __name__ == "__main__":

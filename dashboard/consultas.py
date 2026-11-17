@@ -97,6 +97,8 @@ SQL_GEO = {
 
 def sql_ranking(nivel: str) -> str:
     rotulo, grupo = SQL_GEO[nivel]
+    # no ranking de municípios a linha "NÃO INFORMADO" da UF não é um lugar; nos outros níveis ela entra no total
+    filtro_mun = "\n    AND m.nome <> 'NÃO INFORMADO'" if nivel == "municipio" else ""
     pop_join = ""
     pop_cols = "NULL::bigint AS populacao"
     if nivel in ("regiao", "uf"):
@@ -117,8 +119,7 @@ WITH sim AS (
 ), sinesp AS (
   SELECT {rotulo} AS local, SUM(f.qt_vitimas) FILTER (WHERE e.nome = 'Feminicídio') AS feminicidios
   {_SINESP_FROM}
-  WHERE {_GEO}{_SINESP_EXTRA}
-    AND m.nome <> 'NÃO INFORMADO'
+  WHERE {_GEO}{_SINESP_EXTRA}{filtro_mun}
   GROUP BY {grupo}
 ), base AS (
   SELECT COALESCE(sim.local, sinesp.local) AS local,

@@ -109,6 +109,8 @@ def main():
         if not url:
             raise SystemExit("Defina DATABASE_URL no .env (veja .env.example).")
         banco = load.carregar(url, tabelas, cargas)
+        if load.aplicar_permissoes_painel(url):
+            print("   GRANT de leitura aplicado para painel_leitura")
         for t, n in banco["contagem"].items():
             print(f"   {t:<28} {n:>10,}")
 
