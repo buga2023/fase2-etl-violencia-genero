@@ -123,15 +123,18 @@ fem_ini, fem_fim = (serie.feminicidios.iloc[0], serie.feminicidios.iloc[-1]) if 
 k3.metric("Feminicídios registrados", fmt(serie.feminicidios.sum()),
           delta=f"{fmt(100 * (fem_fim - fem_ini) / fem_ini, 1)}% de {anos[0]} a {anos[1]}" if fem_ini else None,
           delta_color="off", help="Vítimas do evento Feminicídio na SINESP, com o filtro de sexo aplicado.")
-captacao = 100 * serie.feminicidios.sum() / tot.obitos if tot.obitos else float("nan")
-k4.metric("Mortes nomeadas como feminicídio", f"{fmt(captacao, 1)}%",
+# raça, idade e meio só existem no SIM: com esses filtros o numerador (SINESP) não acompanha o denominador
+captacao = (100 * serie.feminicidios.sum() / tot.obitos
+            if tot.obitos and not f.recorte_populacional else float("nan"))
+k4.metric("Mortes nomeadas como feminicídio", "–" if pd.isna(captacao) else f"{fmt(captacao, 1)}%",
           help="Feminicídios (SINESP) ÷ óbitos de mulheres por agressão (SIM). Mede quanto das mortes a polícia "
                "classifica como feminicídio. Conceitos próximos, não idênticos.")
 st.caption(f"Arma de fogo em {fmt(100 * tot.obitos_arma / tot.obitos if tot.obitos else float('nan'), 1)}% "
            f"dos óbitos do recorte · {fmt(tot.obitos)} óbitos no SIM no período.")
 if f.recorte_populacional:
-    st.info("Com filtro de raça, idade ou meio, a taxa por 100 mil usa no denominador todas as mulheres da "
-            "região. Use os números absolutos ou o percentual para comparar grupos.")
+    st.info("Raça/cor, faixa etária e meio da agressão só existem no SIM. Com esses filtros, a taxa por 100 mil "
+            "usa no denominador todas as mulheres da região, os feminicídios (SINESP) não mudam e o indicador "
+            "de mortes nomeadas como feminicídio fica em branco.")
 
 # ---------------------------------------------------------------- seletor de métrica
 METRICAS = {

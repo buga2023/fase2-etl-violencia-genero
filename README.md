@@ -13,7 +13,7 @@ Equipe: Gustavo Souza Santos e Mateus Bulhões.
 
 1. [O problema](#1-o-problema)
 2. [Arquitetura](#2-arquitetura)
-3. [Como reproduzir (deployment guide)](#3-como-reproduzir-deployment-guide)
+3. [Como reproduzir (guia de implantação)](#3-como-reproduzir-guia-de-implantação)
 4. [Segurança e LGPD](#4-segurança-e-lgpd)
 5. [Os V's do Big Data aplicados à base](#5-os-vs-do-big-data-aplicados-à-base)
 6. [Tipos de dados](#6-tipos-de-dados)
@@ -29,7 +29,7 @@ Equipe: Gustavo Souza Santos e Mateus Bulhões.
 
 A pergunta do projeto é: quem são as mulheres mortas por agressão no Brasil, como morrem, onde o risco é maior e se o Estado está nomeando essas mortes como feminicídio.
 
-Nenhuma base pública responde isso sozinha. A SINESP-VDE (Ministério da Justiça) é o registro policial: sabe se o crime foi feminicídio, mas não registra a raça da vítima. O SIM (DataSUS) é a declaração de óbito: tem raça/cor, idade e o meio da agressão, mas não diz se foi feminicídio. Por isso juntamos as duas, com o IBGE ligando os municípios e dando a população feminina para calcular taxas.
+As fontes públicas têm só metade da resposta cada uma. A SINESP-VDE (Ministério da Justiça) é o registro policial: sabe se o crime foi feminicídio, mas não registra a raça da vítima. O SIM (DataSUS) é a declaração de óbito: tem raça/cor, idade e o meio da agressão, mas não diz se foi feminicídio. Por isso juntamos as duas, com o IBGE ligando os municípios e dando a população feminina para calcular taxas.
 
 ## 2. Arquitetura
 
@@ -72,7 +72,7 @@ flowchart LR
 
 Não usamos Spark/Hadoop. Os dados brutos somam uns 2,6 GB e cabem num notebook se forem lidos em blocos (pandas com `chunksize`), então um cluster só traria custo e complexidade. Se a base crescesse para dezenas de GB (por exemplo, todos os anos do SIM desde 1996), a troca natural seria PySpark, mantendo as mesmas regras de `etl/config.py`.
 
-## 3. Como reproduzir (deployment guide)
+## 3. Como reproduzir (guia de implantação)
 
 Pré-requisitos: Python 3.12, Terraform 1.5 ou mais novo e uma conta no Aiven.
 
@@ -99,7 +99,7 @@ O `scripts/tf.sh` só lê o token do `.env` e repassa como `TF_VAR_aiven_api_tok
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-python run_pipeline.py                  # ETL completo: baixa ~2,6 GB, trata, carrega (~25 min)
+python run_pipeline.py                  # ETL completo: baixa ~2,6 GB, trata, carrega e aplica o GRANT do painel (~25 min)
 # ou, se o banco foi recriado e os CSVs tratados já estão no repositório:
 python -m scripts.carregar_processados  # carrega data/processed em ~40 s e aplica o GRANT do painel
 python -m scripts.verificar_banco       # grava a evidência em docs/verificacao_banco.md
@@ -125,7 +125,8 @@ Publicação no Streamlit Community Cloud: "Create app", repositório `buga2023/
 
 - Nenhuma senha, token ou URI está no repositório. `.env`, `terraform.tfvars`, `*.tfstate` e `.streamlit/secrets.toml` estão no `.gitignore`. No Streamlit Cloud a conexão fica em Secrets.
 - O token do Aiven foi criado com validade de 30 dias e só é lido do `.env` pelo `scripts/tf.sh`.
-- O dashboard usa o usuário `painel_leitura`, criado pelo Terraform, com `GRANT SELECT` no schema `vde` e nada mais (`sql/04_usuario_painel.sql`). Testamos: um `DELETE` com esse usuário falha com `InsufficientPrivilege`. Se a senha do painel vazar, ninguém consegue alterar os dados.
+- O dashboard usa o usuário `painel_leitura`, criado pelo Terraform, com `GRANT SELECT` no schema `vde` e nada mais (`sql/04_usuario_painel.sql`). O teste está em `docs/teste_usuario_painel.md` (gerado por `python -m scripts.testar_usuario_painel`): SELECT funciona, e INSERT, UPDATE, DELETE, DROP e CREATE falham com `InsufficientPrivilege`.
+- O banco aceita conexão de qualquer IP (sem `ip_filter` no Terraform) porque o Streamlit Community Cloud não tem IP fixo. A proteção fica na senha forte gerada pelo Aiven, no SSL obrigatório (`sslmode=require`) e no usuário só leitura. Num ambiente pago com IP fixo, o certo seria liberar só esse IP em `pg_user_config.ip_filter`.
 - As consultas do painel usam parâmetros (`%(nome)s` do psycopg), sem concatenar texto vindo da tela no SQL.
 - LGPD: as duas bases são dados abertos e já saem sem identificação (o SIM aberto não tem nome, CPF nem endereço). Mesmo assim, o ETL agrega tudo por mês × município × categoria antes de carregar, então nenhuma linha do banco corresponde a uma pessoa. Também lemos só 6 das mais de 80 colunas do SIM, o mínimo para a pergunta.
 
@@ -135,7 +136,7 @@ Em aula vimos os 3 V's de Doug Laney. O guia do projeto pede mais dois.
 
 | V | Na nossa base | O que fizemos |
 |---|---|---|
-| Volume | 6 XLSX da SINESP (~24 MB e 765 mil linhas cada) + 6 arquivos do SIM (44 a 633 MB, até 1,8 milhão de óbitos por ano). ~2,6 GB e 13,9 milhões de linhas | Leitura do SIM em blocos de 200 mil linhas, só 6 colunas, filtro (CID X85 a Y09, sexo feminino) e agregação dentro de cada bloco. O banco ficou com 256 mil linhas e uns 37 MB, menos de 4% do 1 GB do plano free |
+| Volume | 6 XLSX da SINESP (~24 MB e 765 mil linhas cada) + 6 arquivos do SIM (44 a 633 MB, até 1,8 milhão de óbitos por ano). ~2,6 GB e 13,9 milhões de linhas | Leitura do SIM em blocos de 200 mil linhas, só 6 colunas, filtro (CID X85 a Y09, sexo feminino) e agregação dentro de cada bloco. O banco ficou com 256 mil linhas e uns 25 MB, cerca de 2,5% do 1 GB do plano free |
 | Velocidade | Fontes publicadas em lote, uma vez por ano. Sem streaming | Pipeline em batch. Um workflow do GitHub Actions roda todo dia 1º e confere se MJSP, DataSUS ou IBGE publicaram arquivo novo (`scripts/verificar_fontes.py`) |
 | Variedade | XLSX, CSV com `;`, ZIP, JSON de API; layout que muda entre anos; SIM 2022/2023 sem cabeçalho | Normalização de nomes de coluna, validação de colunas obrigatórias e padronização do SIM sem alterar o arquivo original |
 | Veracidade | Raça ignorada, município escrito à mão na SINESP, contagem como texto com ponto de milhar, SIM 2024 preliminar, Distrito Federal com linhas repetidas | 18 regras de tratamento documentadas, hash SHA-256 de cada arquivo na tabela `meta_carga`, totais conferidos antes e depois, comparação com o Anuário do FBSP e o Atlas da Violência |
@@ -253,7 +254,7 @@ Embaixo dos cards aparece também o percentual de mortes por arma de fogo (49,1%
 
 ### Interatividade
 
-- Filtros cruzados na barra lateral: ano (intervalo), região, UF, raça/cor, faixa etária, meio da agressão e sexo da vítima. Todos valem para todos os gráficos ao mesmo tempo.
+- Filtros cruzados na barra lateral: ano (intervalo), região, UF, raça/cor, faixa etária, meio da agressão e sexo da vítima. Ano, região e UF valem para tudo. Raça/cor, faixa etária e meio só existem no SIM, então filtram os óbitos; sexo só existe na SINESP, então filtra os feminicídios. Com filtro de raça, idade ou meio o KPI 4 fica em branco, porque o numerador (SINESP) não teria o mesmo recorte do denominador.
 - Seletor de métrica: o gráfico de evolução anual e o ranking alternam entre taxa de óbitos, óbitos absolutos, taxa de feminicídio, feminicídios absolutos e % de vítimas negras.
 - Drill-down: clicando numa barra do ranking o painel desce de região para estado e de estado para município (top 15), com botão para voltar.
 - Cruzamentos: raça × faixa etária (barras empilhadas em %), meio da agressão × raça, sazonalidade por mês e tabela do recorte com exportação em CSV.
@@ -262,17 +263,17 @@ Embaixo dos cards aparece também o percentual de mortes por arma de fogo (49,1%
 
 A análise estatística completa está em `docs/relatorio_fase3/` e é reproduzida por `analise/perguntas.py`. Com as taxas da Fase 4, os achados ficaram assim:
 
-1. O registro de feminicídio cresce, mas as mortes não. Os feminicídios na SINESP subiram 12,8% de 2019 a 2024 (regressão linear com R² = 0,94 e p = 0,002), enquanto a taxa de óbitos de mulheres por agressão no SIM ficou parada em torno de 3,5 por 100 mil. A explicação que fecha com os dados é que mais mortes passaram a ser classificadas como feminicídio, e não que mais mulheres estão morrendo. Para a ODS 5 isso é um avanço de reconhecimento, mas mostra que a violência letal em si não caiu.
+1. O registro de feminicídio cresce, mas as mortes não. Os feminicídios na SINESP subiram 12,8% de 2019 a 2024 considerando todas as vítimas do evento, o mesmo critério do Anuário do FBSP (só mulheres, a alta é de 13,0%). A regressão linear dá R² = 0,94 e p = 0,002. Já a taxa de óbitos de mulheres por agressão no SIM ficou em torno de 3,5 por 100 mil, sem tendência (p = 0,675). Como as mortes não aumentaram, o crescimento do feminicídio vem principalmente de mais casos sendo classificados assim. Para a ODS 5 é um avanço no reconhecimento do crime, mas a violência letal contra mulheres não diminuiu no período.
 
-2. O risco é muito desigual entre os estados. Com a taxa, a leitura muda: São Paulo tem o maior número absoluto de feminicídios, mas a menor taxa de óbitos do país (1,59 por 100 mil). Roraima tem 9,49, seis vezes mais. Norte (5,14) e Nordeste (4,85) ficam bem acima do Sudeste (2,25). Política pública que olha só para número absoluto concentra recurso onde a mulher corre menos risco.
+2. O risco é muito desigual entre os estados. São Paulo tem o maior número absoluto de feminicídios, mas a menor taxa de óbitos do país (1,59 por 100 mil). Roraima tem 9,49, seis vezes mais. Norte (5,14) e Nordeste (4,85) ficam bem acima do Sudeste (2,25). Por isso o painel abre com a taxa e não com o número absoluto.
 
-3. Duas em cada três vítimas são negras, e isso não mudou em seis anos (66% a 68%). O percentual vai de cerca de 20% em Santa Catarina e no Rio Grande do Sul a mais de 90% em Alagoas, Amapá, Sergipe e Ceará, e o teste qui-quadrado confirma que a distribuição racial muda entre as regiões (p < 0,001). Cruzando com a idade, as mulheres negras são maioria em todas as faixas de 12 a 59 anos, então a desigualdade não é efeito da idade. É o ponto central da ODS 18: raça e território andam juntos.
+3. Duas em cada três vítimas são negras, e isso não mudou em seis anos (66% a 68%). O percentual vai de cerca de 20% em Santa Catarina e no Rio Grande do Sul a mais de 90% em Alagoas, Amapá, Sergipe e Ceará, e o teste qui-quadrado confirma que a distribuição racial muda entre as regiões (p < 0,001). Cruzando com a idade, as mulheres negras são maioria em todas as faixas de 12 a 59 anos, então a desigualdade racial não é explicada pela idade das vítimas.
 
-4. Metade morre por arma de fogo (49,1%), e entre as mulheres negras essa fatia é ainda maior que entre as não negras. A faixa de 18 a 39 anos concentra 57% das mortes, com pico em dezembro. Isso aponta onde a prevenção tem mais retorno: controle de arma de fogo, rede de proteção para mulheres jovens e reforço no fim do ano.
+4. Metade morre por arma de fogo (49,1%), e entre as mulheres negras essa fatia é maior que entre as não negras. A faixa de 18 a 39 anos concentra 57% das mortes. No calendário, os óbitos do SIM são mais frequentes em janeiro e os feminicídios registrados têm pico em dezembro, então o fim e o começo do ano merecem atenção. Controle de arma de fogo e proteção para mulheres jovens são as frentes que esses números apontam.
 
 5. A classificação não é igual no país. Só 37% das mortes de mulheres por agressão aparecem como feminicídio no registro policial, e esse número varia muito: o Ceará tem taxa de óbitos alta (5,90) e taxa de feminicídio baixa (0,72), enquanto Mato Grosso registra 2,59. Isso sugere subnotificação desigual. Um protocolo nacional de classificação ajudaria a medir a ODS 5 de forma comparável entre os estados.
 
-Os números batem com quem publica sobre o tema: o Anuário do FBSP tem 1.492 feminicídios em 2024 (1.504 na revisão) e a nossa base tem 1.501; o Atlas da Violência tem 3.903 mulheres assassinadas em 2023, 68,2% negras, e a nossa base tem 3.887 e 68,1% (a diferença é que o Atlas inclui intervenção legal, CID Y35 e Y36).
+Os números batem com quem publica sobre o tema: o Anuário do FBSP tem 1.492 feminicídios em 2024 (1.504 na revisão) e a nossa base tem 1.501, contando todas as vítimas do evento como o Anuário faz; o Atlas da Violência tem 3.903 mulheres assassinadas em 2023, 68,2% negras, e a nossa base tem 3.887 e 68,1% (a diferença é que o Atlas inclui intervenção legal, CID Y35 e Y36).
 
 ## 12. Limitações
 
