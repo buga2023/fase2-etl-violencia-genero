@@ -1,0 +1,19 @@
+# V de Velocidade: as fontes saem em lote (anual). Todo dia 1º o Actions confere se
+# o MJSP, o DataSUS ou o IBGE publicaram arquivo novo e deixa o resultado no resumo do job.
+name: verificar-fontes
+
+on:
+  schedule:
+    - cron: "0 9 1 * *"
+  workflow_dispatch:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - run: python -m scripts.verificar_fontes | tee -a "$GITHUB_STEP_SUMMARY"
