@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Painel Fase 3 — Feminicídio interseccional</title>
+<title>Painel Fase 3: Feminicídio interseccional</title>
 <style>
 :root{
   --paper:#F7F4EE; --panel:#FCFAF5; --panel2:#EFEAE0; --ink:#1C1C1C; --mute:#5a4a3a;
@@ -161,7 +161,7 @@ function opt(v,t){return '<option value="'+v+'">'+t+'</option>';}
 fl.innerHTML=''
  +'<div class="fg" style="grid-column:1/-1"><label>Anos</label><div class="chips" id="fanos"></div></div>'
  +'<div class="fg"><label>Região</label><select id="freg"><option value="">Todas</option>'+D.regioes.map(function(r){return opt(r,r);}).join('')+'</select></div>'
- +'<div class="fg"><label>UF</label><select id="fuf"><option value="">Todas</option>'+D.ufs.map(function(u){return opt(u[0],u[0]+' — '+u[1]);}).join('')+'</select></div>'
+ +'<div class="fg"><label>UF</label><select id="fuf"><option value="">Todas</option>'+D.ufs.map(function(u){return opt(u[0],u[0]+' - '+u[1]);}).join('')+'</select></div>'
  +'<div class="fg"><label>Raça e cor</label><select id="fraca"><option value="">Todas</option>'+D.racas.map(function(r){return opt(r[0],r[0]);}).join('')+'</select></div>'
  +'<div class="fg"><label>Faixa etária</label><select id="ffaixa"><option value="">Todas</option>'+D.faixas.map(function(f){return opt(f,f);}).join('')+'</select></div>'
  +'<div class="fg"><label>Meio</label><select id="fmeio"><option value="">Todos</option>'+D.meios.map(function(m){return opt(m,m);}).join('')+'</select></div>';
@@ -277,7 +277,7 @@ function scatter(mount,pts,fmt){
   var b=(n*sxy-sx*sy)/((n*sxx-sx*sx)||1),a=(sy-b*sx)/n;
   s.appendChild(el('line',{x1:xx(0),y1:yy(a),x2:xx(mx),y2:yy(a+b*mx),stroke:col('--c3'),'stroke-width':1.6,'stroke-dasharray':'5 4'}));
   pts.forEach(function(p){var c=el('circle',{cx:xx(p.x),cy:yy(p.y),r:4.5,fill:col('--c1'),'fill-opacity':.8,stroke:col('--panel'),'stroke-width':1});
-    title(c,p.l+' — SINESP '+fmtI(p.x)+' · SIM '+fmtI(p.y));s.appendChild(c);
+    title(c,p.l+' - SINESP '+fmtI(p.x)+' · SIM '+fmtI(p.y));s.appendChild(c);
     if(p.x>mx*0.3||p.y>my*0.45)s.appendChild(el('text',{x:xx(p.x)+6,y:yy(p.y)+3,class:'axlab'},p.l));});
   s.appendChild(el('text',{x:(padl+W-padr)/2,y:H-4,'text-anchor':'middle',class:'axlab'},'Feminicídios registrados na SINESP, por estado'));
   mount.appendChild(s);

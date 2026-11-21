@@ -1,4 +1,4 @@
-"""CARGA — cria o esquema e carrega dimensões e fatos no PostgreSQL via COPY.
+"""CARGA: cria o esquema e carrega dimensões e fatos no PostgreSQL via COPY.
 
 Tudo roda numa única transação: se qualquer passo falhar, o banco volta ao
 estado anterior (nunca fica meio carregado).

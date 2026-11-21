@@ -27,8 +27,8 @@ def relatorio(manifesto, log_sinesp, log_sim, extras, banco) -> str:
          "| Fonte | Arquivo | Tamanho | SHA-256 (início) |", "|---|---|---:|---|"]
     L += [f"| {m['fonte']} | `{m['arquivo']}` | {m['tamanho_bytes'] / 1e6:.1f} MB | `{m['sha256'][:16]}` |"
           for m in manifesto]
-    for titulo, log in (("2. SINESP-VDE — rastro do tratamento", log_sinesp),
-                        ("3. SIM/DataSUS — rastro do tratamento", log_sim)):
+    for titulo, log in (("2. SINESP-VDE: rastro do tratamento", log_sinesp),
+                        ("3. SIM/DataSUS: rastro do tratamento", log_sim)):
         L += ["", f"## {titulo}", "", "| Etapa | Linhas / valor |", "|---|---:|"]
         L += [f"| {etapa} | {_fmt(int(v))} |" for etapa, v in log]
     if extras["eventos_nao_encontrados"]:
@@ -36,9 +36,9 @@ def relatorio(manifesto, log_sinesp, log_sim, extras, banco) -> str:
               + ", ".join(extras["eventos_nao_encontrados"])]
     mnc = extras["municipios_nao_casados"]
     if len(mnc):
-        L += ["", f"**Municípios da SINESP sem correspondência no IBGE ({len(mnc)})** — "
+        L += ["", f"**Municípios da SINESP sem correspondência no IBGE ({len(mnc)})**: "
               "acrescente em `ALIASES_MUNICIPIO` (etl/config.py) se forem grafias alternativas:", ""]
-        L += [f"- {u} — {m}" for u, m in mnc.head(50).itertuples(index=False)]
+        L += [f"- {u}: {m}" for u, m in mnc.head(50).itertuples(index=False)]
     if banco:
         L += ["", "## 4. Base armazenada (schema `vde`)", "", "| Tabela | Registros | Tamanho |", "|---|---:|---:|"]
         L += [f"| {t} | {_fmt(n)} | {banco['tamanhos'].get(t, 0) / 1024:.0f} KB |" for t, n in banco["contagem"].items()]

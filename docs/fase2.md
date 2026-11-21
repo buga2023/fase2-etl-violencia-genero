@@ -3,7 +3,7 @@
 Documentação da Fase 2 (entregue em 13/10/2026). O README principal resume; aqui ficam as
 decisões de tratamento em detalhe. Relatório em PDF: `docs/relatorio/Relatorio_Fase2_Gustavo_Santos_Mateus_Bulhoes.pdf`.
 
-## Entregável 1 — Base de dados tratada
+## Entregável 1: base de dados tratada
 
 | O que o barema pede | Onde está |
 |---|---|
@@ -22,7 +22,7 @@ decisões de tratamento em detalhe. Relatório em PDF: `docs/relatorio/Relatorio
 
 A SINESP traz **gênero** mas não traz **raça/cor**. O SIM traz raça/cor. Por isso a base tratada une as duas fontes por dimensões compartilhadas. É isso que torna possível a análise interseccional (ODS 5 + ODS 18).
 
-### Decisões de tratamento — SINESP-VDE
+### Decisões de tratamento da SINESP-VDE
 
 | # | Problema encontrado na origem | Decisão | Justificativa |
 |---|---|---|---|
@@ -38,7 +38,7 @@ A SINESP traz **gênero** mas não traz **raça/cor**. O SIM traz raça/cor. Por
 | 10 | Colunas `agente`, `arma`, `faixa_etaria`, `total_peso` | Descartadas | Detalham outros indicadores (apreensões, mortes de agentes). O relatório mostra quantas linhas do escopo têm essas colunas preenchidas, como evidência do descarte |
 | 11 | Formato largo (`feminino`, `masculino`, `nao_informado`) | *Unpivot* para uma linha por sexo | Sexo vira dimensão, igual no SIM, e as duas fontes ficam comparáveis |
 
-### Decisões de tratamento — SIM/DataSUS
+### Decisões de tratamento do SIM/DataSUS
 
 | # | Problema encontrado na origem | Decisão | Justificativa |
 |---|---|---|---|
@@ -52,7 +52,7 @@ A SINESP traz **gênero** mas não traz **raça/cor**. O SIM traz raça/cor. Por
 
 ---
 
-## Entregável 2 — Processo de tratamento
+## Entregável 2: processo de tratamento
 
 O processo é um ETL em Python (pandas) em três camadas, uma por módulo:
 
@@ -70,7 +70,7 @@ O processo é um ETL em Python (pandas) em três camadas, uma por módulo:
 
 ---
 
-## Entregável 3 — Base armazenada no banco
+## Entregável 3: base armazenada no banco
 
 ### Estratégia de modelagem: esquema estrela com duas tabelas fato
 

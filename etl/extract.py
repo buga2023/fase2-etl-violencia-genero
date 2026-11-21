@@ -1,4 +1,4 @@
-"""EXTRAÇÃO — baixa (quando possível) e registra a VERSÃO ORIGINAL de cada arquivo.
+"""EXTRAÇÃO: baixa (quando possível) e registra a VERSÃO ORIGINAL de cada arquivo.
 
 O manifesto data/raw/manifest.json guarda nome, origem, tamanho, data e SHA-256
 de cada arquivo bruto. Assim qualquer pessoa confere se está usando exatamente a

@@ -1,4 +1,4 @@
-"""TRATAMENTO — SINESP-VDE (vítimas por município/mês/evento, quebradas por sexo).
+"""TRATAMENTO: SINESP-VDE (vítimas por município/mês/evento, quebradas por sexo).
 
 Passos (cada um registrado no log de qualidade):
  1. padroniza nomes de coluna (as planilhas variam entre anos)

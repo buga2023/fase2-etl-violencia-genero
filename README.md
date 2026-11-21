@@ -4,8 +4,9 @@ Projeto da disciplina Big Data e Analytics (UCSal, Engenharia de Software, 2026/
 
 Equipe: Gustavo Souza Santos e Mateus Bulhões.
 
-**Dashboard publicado:** https://feminicidio-interseccional.streamlit.app
-**Rodar o dashboard local (um comando, depois do setup):** `streamlit run dashboard/app.py`
+Dashboard publicado: https://feminicidio-interseccional.streamlit.app
+
+Para rodar local, depois do setup: `streamlit run dashboard/app.py`
 
 ![Painel](docs/img/painel_kpis.jpg)
 
@@ -27,9 +28,9 @@ Equipe: Gustavo Souza Santos e Mateus Bulhões.
 
 ## 1. O problema
 
-A pergunta do projeto é: quem são as mulheres mortas por agressão no Brasil, como morrem, onde o risco é maior e se o Estado está nomeando essas mortes como feminicídio.
+A pergunta que o projeto tenta responder é quem são as mulheres mortas por agressão no Brasil entre 2019 e 2024, como morrem, onde o risco é maior e até que ponto o Estado nomeia essas mortes como feminicídio.
 
-As fontes públicas têm só metade da resposta cada uma. A SINESP-VDE (Ministério da Justiça) é o registro policial: sabe se o crime foi feminicídio, mas não registra a raça da vítima. O SIM (DataSUS) é a declaração de óbito: tem raça/cor, idade e o meio da agressão, mas não diz se foi feminicídio. Por isso juntamos as duas, com o IBGE ligando os municípios e dando a população feminina para calcular taxas.
+Nenhuma fonte pública responde tudo sozinha. A SINESP-VDE, do Ministério da Justiça, é o registro policial: traz a classificação de feminicídio, mas não a raça da vítima. O SIM, do DataSUS, é a declaração de óbito: tem raça/cor, idade e meio da agressão, só que não diz se o caso foi tratado como feminicídio. A saída foi cruzar as duas, usando o IBGE para ligar os municípios e fornecer a população feminina que serve de denominador das taxas.
 
 ## 2. Arquitetura
 
@@ -70,7 +71,7 @@ flowchart LR
 | Dashboard | Streamlit + Plotly, consultando o banco a cada interação | `dashboard/` |
 | Automação | GitHub Actions | `.github/workflows/` |
 
-Não usamos Spark/Hadoop. Os dados brutos somam uns 2,6 GB e cabem num notebook se forem lidos em blocos (pandas com `chunksize`), então um cluster só traria custo e complexidade. Se a base crescesse para dezenas de GB (por exemplo, todos os anos do SIM desde 1996), a troca natural seria PySpark, mantendo as mesmas regras de `etl/config.py`.
+Não usamos Spark nem Hadoop. Os arquivos brutos somam uns 2,6 GB e cabem num notebook comum desde que sejam lidos em blocos com pandas (`chunksize`); um cluster só aumentaria custo e complexidade. Se a base crescesse para dezenas de GB, como aconteceria ao puxar o SIM desde 1996, aí valeria a pena trocar por PySpark, reaproveitando as regras que já estão em `etl/config.py`.
 
 ## 3. Como reproduzir (guia de implantação)
 
@@ -158,12 +159,9 @@ Não usamos dado não estruturado. A causa da morte já vem codificada pela CID-
 
 ## 7. Por que banco relacional
 
-Escolhemos PostgreSQL (relacional) e não OpenSearch (não relacional, também disponível no Aiven):
+Escolhemos PostgreSQL e não OpenSearch, que também está disponível no Aiven. Os dados já vêm em tabelas com chaves claras (tempo, município, sexo, raça) e a análise é basicamente contagem e cruzamento com `JOIN` e `GROUP BY`, que é onde o SQL resolve bem. Juntar SINESP e SIM também depende de integridade: com chave estrangeira, todo óbito precisa apontar para um município e um mês que existem, e o banco recusa o contrário.
 
-- Os dados já são tabelas com chaves claras (tempo, município, sexo, raça), e a análise é de contagem e cruzamento com `JOIN` e `GROUP BY`. É o caso de uso do SQL.
-- Juntar duas fontes depende de integridade: chave estrangeira garante que todo óbito aponta para um município e um mês que existem.
-- O volume depois do ETL é pequeno (dezenas de MB), então não precisamos da escala horizontal de um NoSQL.
-- OpenSearch faria sentido para busca em texto livre ou logs, o que esta base não tem.
+Depois do ETL o volume é pequeno, dezenas de MB, então a escala horizontal de um NoSQL não faria falta. OpenSearch seria útil para busca em texto livre ou logs, coisas que esta base não tem.
 
 ## 8. Modelo e dicionário de dados
 
@@ -254,20 +252,19 @@ Embaixo dos cards aparece também o percentual de mortes por arma de fogo (49,1%
 
 ### Interatividade
 
-- Filtros cruzados na barra lateral: ano (intervalo), região, UF, raça/cor, faixa etária, meio da agressão e sexo da vítima. Ano, região e UF valem para tudo. Raça/cor, faixa etária e meio só existem no SIM, então filtram os óbitos; sexo só existe na SINESP, então filtra os feminicídios. Com filtro de raça, idade ou meio o KPI 4 fica em branco, porque o numerador (SINESP) não teria o mesmo recorte do denominador.
-- Seletor de métrica: o gráfico de evolução anual e o ranking alternam entre taxa de óbitos, óbitos absolutos, taxa de feminicídio, feminicídios absolutos e % de vítimas negras.
-- Drill-down: clicando numa barra do ranking o painel desce de região para estado e de estado para município (top 15), com botão para voltar.
-- Cruzamentos: raça × faixa etária (barras empilhadas em %), meio da agressão × raça, sazonalidade por mês e tabela do recorte com exportação em CSV.
+Na barra lateral ficam os filtros: ano (intervalo), região, UF, raça/cor, faixa etária, meio da agressão e sexo da vítima. Ano, região e UF valem para tudo. Raça/cor, faixa etária e meio só existem no SIM, então filtram os óbitos; sexo só existe na SINESP, então filtra os feminicídios. Quando entra filtro de raça, idade ou meio, o KPI 4 fica em branco, porque o numerador (SINESP) não teria o mesmo recorte do denominador.
+
+O gráfico de evolução anual e o ranking têm um seletor de métrica, que alterna entre taxa de óbitos, óbitos absolutos, taxa de feminicídio, feminicídios absolutos e % de vítimas negras. Clicando numa barra do ranking, o painel desce de região para estado e de estado para município (top 15), com botão para voltar. Embaixo entram os cruzamentos: raça × faixa etária em barras empilhadas, meio da agressão × raça, sazonalidade por mês e a tabela do recorte, que exporta em CSV.
 
 ## 11. Análise crítica: o que os dados mostram sobre ODS 5 e ODS 18
 
 A análise estatística completa está em `docs/relatorio_fase3/` e é reproduzida por `analise/perguntas.py`. Com as taxas da Fase 4, os achados ficaram assim:
 
-1. O registro de feminicídio cresce, mas as mortes não. Os feminicídios na SINESP subiram 12,8% de 2019 a 2024 considerando todas as vítimas do evento, o mesmo critério do Anuário do FBSP (só mulheres, a alta é de 13,0%). A regressão linear dá R² = 0,94 e p = 0,002. Já a taxa de óbitos de mulheres por agressão no SIM ficou em torno de 3,5 por 100 mil, sem tendência (p = 0,675). Como as mortes não aumentaram, o crescimento do feminicídio vem principalmente de mais casos sendo classificados assim. Para a ODS 5 é um avanço no reconhecimento do crime, mas a violência letal contra mulheres não diminuiu no período.
+1. O registro de feminicídio cresce, mas as mortes não. Considerando todas as vítimas do evento, como faz o Anuário do FBSP, os feminicídios da SINESP subiram 12,8% de 2019 a 2024; contando só mulheres, a alta é de 13,0%. A regressão linear dá R² = 0,94 e p = 0,002. Já a taxa de óbitos de mulheres por agressão no SIM ficou perto de 3,5 por 100 mil, sem tendência (p = 0,675). Ou seja, o crescimento do feminicídio vem principalmente de mais casos sendo classificados assim, não de mais mortes. Para a ODS 5 isso conta como avanço no reconhecimento do crime, mas não como redução da violência letal.
 
-2. O risco é muito desigual entre os estados. São Paulo tem o maior número absoluto de feminicídios, mas a menor taxa de óbitos do país (1,59 por 100 mil). Roraima tem 9,49, seis vezes mais. Norte (5,14) e Nordeste (4,85) ficam bem acima do Sudeste (2,25). Por isso o painel abre com a taxa e não com o número absoluto.
+2. O risco é muito desigual entre os estados. São Paulo lidera em número absoluto de feminicídios, mas tem a menor taxa de óbitos do país (1,59 por 100 mil); Roraima chega a 9,49, quase seis vezes mais. Norte (5,14) e Nordeste (4,85) ficam bem acima do Sudeste (2,25). Foi por isso que o painel abre pela taxa, e não pelo número absoluto.
 
-3. Duas em cada três vítimas são negras, e isso não mudou em seis anos (66% a 68%). O percentual vai de cerca de 20% em Santa Catarina e no Rio Grande do Sul a mais de 90% em Alagoas, Amapá, Sergipe e Ceará, e o teste qui-quadrado confirma que a distribuição racial muda entre as regiões (p < 0,001). Cruzando com a idade, as mulheres negras são maioria em todas as faixas de 12 a 59 anos, então a desigualdade racial não é explicada pela idade das vítimas.
+3. Duas em cada três vítimas são negras, e isso não mudou em seis anos (66% a 68%). O percentual vai de cerca de 20% em Santa Catarina e no Rio Grande do Sul a mais de 90% em Alagoas, Amapá, Sergipe e Ceará, e o teste qui-quadrado confirma que a distribuição racial muda entre as regiões (p < 0,001). Cruzando com a idade, as mulheres negras são maioria em todas as faixas de 12 a 59 anos, então a desigualdade racial não se explica pela idade das vítimas.
 
 4. Metade morre por arma de fogo (49,1%), e entre as mulheres negras essa fatia é maior que entre as não negras. A faixa de 18 a 39 anos concentra 57% das mortes. No calendário, os óbitos do SIM são mais frequentes em janeiro e os feminicídios registrados têm pico em dezembro, então o fim e o começo do ano merecem atenção. Controle de arma de fogo e proteção para mulheres jovens são as frentes que esses números apontam.
 

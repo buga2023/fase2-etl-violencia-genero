@@ -18,7 +18,7 @@ import streamlit as st
 
 import consultas as q
 
-st.set_page_config(page_title="Feminicídio interseccional", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Feminicídio interseccional", layout="wide")
 
 # paleta (categórica em ordem fixa + rampa sequencial azul)
 AZUL, LARANJA, VERDE_AGUA, CINZA = "#2a78d6", "#eb6834", "#1baf7a", "#8a8984"

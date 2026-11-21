@@ -24,7 +24,7 @@ Gerado automaticamente por `run_pipeline.py` em 10/10/2026 23:37.
 | SIM | `sim/Mortalidade_Geral_2024.csv` | 550.8 MB | `be397f348a6ad25c` |
 | IBGE | `ibge/municipios.json` | 2.4 MB | `77bf68d9f5b12375` |
 
-## 2. SINESP-VDE — rastro do tratamento
+## 2. SINESP-VDE: rastro do tratamento
 
 | Etapa | Linhas / valor |
 |---|---:|
@@ -43,7 +43,7 @@ Gerado automaticamente por `run_pipeline.py` em 10/10/2026 23:37.
 | Linhas no fato_vitimas_sinesp (grão final) | 233.988 |
 | Total de vítimas no fato (conferência) | 968.489 |
 
-## 3. SIM/DataSUS — rastro do tratamento
+## 3. SIM/DataSUS: rastro do tratamento
 
 | Etapa | Linhas / valor |
 |---|---:|

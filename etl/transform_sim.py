@@ -1,4 +1,4 @@
-"""TRATAMENTO — SIM/DataSUS (uma linha por Declaração de Óbito).
+"""TRATAMENTO: SIM/DataSUS (uma linha por Declaração de Óbito).
 
 O arquivo nacional tem ~1,5 milhão de linhas/ano. Para caber na memória e no
 limite de 1 GB do Aiven, cada bloco (chunk) é filtrado e AGREGADO antes de
