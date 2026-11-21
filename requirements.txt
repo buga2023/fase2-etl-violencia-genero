@@ -8,3 +8,7 @@ psycopg[binary]==3.2.3
 python-dotenv==1.2.4
 requests==2.34.2
 pytest==9.1.1
+
+# Análise da Fase 3 (analise/)
+scipy==1.18.1
+matplotlib==3.11.2

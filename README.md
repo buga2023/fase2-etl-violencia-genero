@@ -258,7 +258,7 @@ O gráfico de evolução anual e o ranking têm um seletor de métrica, que alte
 
 ## 11. Análise crítica: o que os dados mostram sobre ODS 5 e ODS 18
 
-A análise estatística completa está em `docs/relatorio_fase3/` e é reproduzida por `analise/perguntas.py`. Com as taxas da Fase 4, os achados ficaram assim:
+A análise estatística completa está em `docs/relatorio_fase3/`. Para reproduzir, rode de dentro da pasta, porque os scripts importam o `carregar` diretamente: `cd analise && python perguntas.py` e depois `python figuras.py`. Com as taxas da Fase 4, os achados ficaram assim:
 
 1. O registro de feminicídio cresce, mas as mortes não. Considerando todas as vítimas do evento, como faz o Anuário do FBSP, os feminicídios da SINESP subiram 12,8% de 2019 a 2024; contando só mulheres, a alta é de 13,0%. A regressão linear dá R² = 0,94 e p = 0,002. Já a taxa de óbitos de mulheres por agressão no SIM ficou perto de 3,5 por 100 mil, sem tendência (p = 0,675). Ou seja, o crescimento do feminicídio vem principalmente de mais casos sendo classificados assim, não de mais mortes. Para a ODS 5 isso conta como avanço no reconhecimento do crime, mas não como redução da violência letal.
 
